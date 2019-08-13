@@ -34,7 +34,7 @@ export default class Player extends Rect {
     animate(ctx) {
         this.move();
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.position.x, this.position.y, CONSTANTS.PLAYER_WIDTH, CONSTANTS.PLAYER_HEIGHT);
+        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 
     move () {
