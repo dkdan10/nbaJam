@@ -1,4 +1,5 @@
 import Player from './player'
+import Court from './court';
 
 export default class NBAJamGame {
     constructor(canvas) {
@@ -9,7 +10,8 @@ export default class NBAJamGame {
 
     restart() {
         // START ANIMATION SYCLE
-        this.player = new Player(this.dimensions);
+        this.court = new Court(this.dimensions);
+        this.player = new Player(this.dimensions, this.court);
 
         this.animate();
     }
@@ -19,8 +21,11 @@ export default class NBAJamGame {
         this.ctx.fillStyle = "orange";
         this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
     
+        // ANIMATE OBJECTS
         this.player.animate(this.ctx)
-        // Animte
+        this.court.animate(this.ctx)
+
+        // REQUEST NEXT FRAME
         requestAnimationFrame(this.animate.bind(this));
     }
 

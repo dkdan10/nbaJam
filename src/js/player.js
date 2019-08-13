@@ -7,21 +7,25 @@ const CONSTANTS = {
     TERMINAL_VEL: 8,
     PLAYER_WIDTH: 40,
     PLAYER_HEIGHT: 70,
-    MOVESPEED: 4
-    // WITH_BALL_MOVESPEED: 3.5
+    MOVESPEED: 5,
+    // WITH_BALL_MOVESPEED: 3.5,
+    JUMP_HEIGHT: 14,
+    // ON_FIRE_JUMP_HEIGHT: 16
 };
 
 export default class Player extends Rect {
-    constructor(dimensions) {
+    constructor(dimensions, court) {
         super({ width: CONSTANTS.PLAYER_WIDTH, height: CONSTANTS.PLAYER_HEIGHT })
+        this.court = court
+        this.dimensions = dimensions;
+
         this.velocity = {
             x: 0,
             y: 0
         }
-        this.dimensions = dimensions;
         this.position = {
             x: 0,
-            y: this.dimensions.height - CONSTANTS.PLAYER_HEIGHT
+            y: this.court.position.y - CONSTANTS.PLAYER_HEIGHT
         }
         this.color = "red";
         this.jumping = false;
@@ -39,19 +43,29 @@ export default class Player extends Rect {
 
         // JUMPING
         if (key.isPressed('up') && !this.jumping) {
-            this.velocity.y = 15;
+            this.velocity.y = CONSTANTS.JUMP_HEIGHT;
             this.jumping = true
         }
         this.position.y -= this.velocity.y;
         // GRAVITY
         // if the pos is greater than the floor
-        if (this.position.y + this.height < this.dimensions.height) {
+        if (this.position.y + this.height < this.court.position.y) {
             this.velocity.y -= CONSTANTS.GRAVITY;
         // else set the pos to the floor
         } else {
             this.velocity.y = 0
-            this.position.y = this.dimensions.height - CONSTANTS.PLAYER_HEIGHT
+            this.position.y = this.court.position.y - CONSTANTS.PLAYER_HEIGHT
             this.jumping = false
+        }
+
+        this.checkBounds()
+    }
+
+    checkBounds() {
+        if (this.position.x > this.dimensions.width - this.width) {
+            this.position.x = this.dimensions.width - this.width
+        } else if (this.position.x < 0) {
+            this.position.x = 0
         }
     }
 
