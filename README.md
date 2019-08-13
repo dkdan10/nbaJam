@@ -34,12 +34,16 @@ Main Files:
 ## Development timeline
 Day 1
 * Do first MVP
+
 Day 2
 * Do second MVP
+
 Day 3
 * Clean up first two MVPs work on third MVP.
+
 Day 4
 * Do fourth MVP
+
 Day 5
 * Do fifth MVP
 
