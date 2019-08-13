@@ -5,8 +5,8 @@ import key from './utils/keymaster';
 const CONSTANTS = {
     GRAVITY: 0.5,
     TERMINAL_VEL: 8,
-    PLAYER_WIDTH: 30,
-    PLAYER_HEIGHT: 50,
+    PLAYER_WIDTH: 40,
+    PLAYER_HEIGHT: 70,
     MOVESPEED: 4
     // WITH_BALL_MOVESPEED: 3.5
 };
@@ -39,7 +39,7 @@ export default class Player extends Rect {
 
         // JUMPING
         if (key.isPressed('up') && !this.jumping) {
-            this.velocity.y = 10;
+            this.velocity.y = 15;
             this.jumping = true
         }
         this.position.y -= this.velocity.y;
