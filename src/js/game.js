@@ -16,9 +16,9 @@ export default class NBAJamGame {
         this.court = new Court(this.dimensions);
         this.leftHoop = new Hoop(this.dimensions, "LEFT");
         this.rightHoop = new Hoop(this.dimensions, "RIGHT");
-        this.ball = new Ball(this.dimensions)
+        this.ball = new Ball(this.dimensions, this.court)
 
-        this.player = new Player(this.dimensions, this.court);
+        this.player = new Player(this.court, this.ball);
 
         this.animate();
     }

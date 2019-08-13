@@ -4,7 +4,6 @@ import key from './utils/keymaster';
 
 const CONSTANTS = {
     GRAVITY: 0.5,
-    TERMINAL_VEL: 8,
     PLAYER_WIDTH: 40,
     PLAYER_HEIGHT: 70,
     MOVESPEED: 5,
@@ -14,10 +13,10 @@ const CONSTANTS = {
 };
 
 export default class Player extends Rect {
-    constructor(dimensions, court) {
+    constructor(court, ball) {
         super({ width: CONSTANTS.PLAYER_WIDTH, height: CONSTANTS.PLAYER_HEIGHT })
         this.court = court
-        this.dimensions = dimensions;
+        this.ball = ball
 
         this.velocity = {
             x: 0,
@@ -29,6 +28,7 @@ export default class Player extends Rect {
         }
         this.color = "red";
         this.jumping = false;
+        this.facingRight = true
     }
 
     animate(ctx) {
@@ -38,32 +38,51 @@ export default class Player extends Rect {
     }
 
     move () {
-        if (key.isPressed('right')) this.position.x += CONSTANTS.MOVESPEED;
-        if (key.isPressed('left')) this.position.x -= CONSTANTS.MOVESPEED;
+        if (key.isPressed('right')) {
+            this.position.x += CONSTANTS.MOVESPEED;
+            this.facingRight = true
+        }
+        if (key.isPressed('left')) {
+            this.position.x -= CONSTANTS.MOVESPEED;
+            this.facingRight = false
+        }
 
         // JUMPING
         if (key.isPressed('up') && !this.jumping) {
             this.velocity.y = CONSTANTS.JUMP_HEIGHT;
             this.jumping = true
         }
+
+        this.checkBall() 
+
+        this.handleGravity()
+
+        this.checkBounds()
+    }
+
+    checkBall() {
+        if (!this.ball.possession && this.ball.isOverlappingRect(this)) {
+            this.ball.possession = this
+        }
+    }
+
+    handleGravity() {
         this.position.y -= this.velocity.y;
         // GRAVITY
         // if the pos is greater than the floor
         if (this.position.y + this.height < this.court.position.y) {
             this.velocity.y -= CONSTANTS.GRAVITY;
-        // else set the pos to the floor
+            // else set the pos to the floor
         } else {
             this.velocity.y = 0
-            this.position.y = this.court.position.y - CONSTANTS.PLAYER_HEIGHT
+            this.position.y = this.court.position.y - this.height
             this.jumping = false
         }
-
-        this.checkBounds()
     }
 
     checkBounds() {
-        if (this.position.x > this.dimensions.width - this.width) {
-            this.position.x = this.dimensions.width - this.width
+        if (this.position.x > this.court.width - this.width) {
+            this.position.x = this.court.width - this.width
         } else if (this.position.x < 0) {
             this.position.x = 0
         }
