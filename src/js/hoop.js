@@ -3,7 +3,7 @@ import Rect from './utils/rect'
 const CONSTANTS = {
     HOOP_Y_MULTIPLIER: 0.3,
     HOOP_HEIGHT: 40,
-    HOOP_WIDTH: 40,
+    HOOP_WIDTH: 50,
     HOOP_X_DISTANCE: 50
 }
 
