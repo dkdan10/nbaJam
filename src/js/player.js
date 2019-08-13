@@ -28,7 +28,7 @@ export default class Player extends Rect {
         }
         this.color = "red";
         this.jumping = false;
-        this.facingRight = true
+        this.facingRight = true;
     }
 
     animate(ctx) {
@@ -53,6 +53,10 @@ export default class Player extends Rect {
             this.jumping = true
         }
 
+        if (key.isPressed('x')) {
+            this.preformAction();
+        }
+
         this.checkBall() 
 
         this.handleGravity()
@@ -60,9 +64,15 @@ export default class Player extends Rect {
         this.checkBounds()
     }
 
+    preformAction() {
+        if (this.ball.possession === this) {
+            this.ball.shoot()
+        }
+    }
+
     checkBall() {
         if (!this.ball.possession && this.ball.isOverlappingRect(this)) {
-            this.ball.possession = this
+            this.ball.claimPossession(this)
         }
     }
 

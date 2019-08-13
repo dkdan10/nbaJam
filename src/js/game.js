@@ -14,9 +14,9 @@ export default class NBAJamGame {
     restart() {
         // START ANIMATION SYCLE
         this.court = new Court(this.dimensions);
-        this.leftHoop = new Hoop(this.dimensions, "LEFT");
-        this.rightHoop = new Hoop(this.dimensions, "RIGHT");
         this.ball = new Ball(this.dimensions, this.court)
+        this.leftHoop = new Hoop(this.dimensions, "LEFT", this.ball);
+        this.rightHoop = new Hoop(this.dimensions, "RIGHT", this.ball);
 
         this.player = new Player(this.court, this.ball);
 
