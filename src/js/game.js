@@ -50,31 +50,30 @@ export default class NBAJamGame {
     
     animate() {        
         // CREATES BACKGROUND
-        if (!this.gameOver()) {
         this.ctx.fillStyle = "orange";
         this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
         
-            // ANIMATE OBJECTS
-            this.player.animate(this.ctx)
-            this.player2.animate(this.ctx)
-            this.ball.animate(this.ctx)
-            this.leftHoop.animate(this.ctx)
-            this.rightHoop.animate(this.ctx)
-
-            this.scoreboard.animate(this.ctx)
-            this.court.animate(this.ctx)
-
-            // REQUEST NEXT FRAME
-        } else {
+        // ANIMATE OBJECTS
+        this.player.animate(this.ctx)
+        this.player2.animate(this.ctx)
+        this.ball.animate(this.ctx)
+        this.leftHoop.animate(this.ctx)
+        this.rightHoop.animate(this.ctx)
+        
+        this.scoreboard.animate(this.ctx)
+        this.court.animate(this.ctx)
+        
+        if (this.gameOver()) {
             this.displayWinner()
         }
+        // REQUEST NEXT FRAME
         if (this.playingGame) requestAnimationFrame(this.animate.bind(this));
     }
 
 
 
     gameOver () {
-        return this.scoreboard.timeLeft <= 0
+        return this.scoreboard.timeLeft === 0
     }
 
     displayWinner () {
