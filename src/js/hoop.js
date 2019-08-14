@@ -40,7 +40,6 @@ export default class Hoop extends Rect {
         if (this.ball.isOverlappingRect(this.scoreHitbox)) {
             if (!this.justScored) this.score += 2
             this.justScored = true
-            console.log(this.score)
             setTimeout(() => {
                 this.justScored = false
             }, 1000);

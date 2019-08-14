@@ -23,7 +23,7 @@ export default class Player extends Rect {
             y: 0
         }
         this.position = {
-            x: 0,
+            x: this.court.width - this.width,
             y: this.court.position.y - CONSTANTS.PLAYER_HEIGHT
         }
         this.color = "red";

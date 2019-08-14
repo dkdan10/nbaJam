@@ -40,7 +40,7 @@ export default class Ball extends Circle {
         ctx.closePath();
     }
     claimPossession(player) {
-        if (!this.noTouch[player]) this.possession = player
+        if (!this.noTouch[player.color]) this.possession = player
     }
 
 
@@ -63,9 +63,9 @@ export default class Ball extends Circle {
                 this.velocity.y = this.power
                 this.possession = null
         
-                this.noTouch[shootingPlayer] = true        
+                this.noTouch[shootingPlayer.color] = true        
                 setTimeout(() => {
-                    this.noTouch[shootingPlayer] = false
+                    this.noTouch[shootingPlayer.color] = false
                 }, 500);
                 this.power = 0
             }, 20);
