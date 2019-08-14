@@ -28,6 +28,7 @@ export default class Hoop extends Rect {
         this.scoreHitbox = new ScoreHitbox(this, hoopSide)
         this.color = "purple"
         this.score = 0
+        this.justScored = false
     }
 
     animate(ctx) {
@@ -37,8 +38,13 @@ export default class Hoop extends Rect {
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
         this.scoreHitbox.animate(ctx)
         if (this.ball.isOverlappingRect(this.scoreHitbox)) {
-            this.score += 1
+            if (!this.justScored) this.score += 2
+            this.justScored = true
             console.log(this.score)
+            setTimeout(() => {
+                this.justScored = false
+            }, 1000);
+            
         }
     }
 
@@ -59,7 +65,7 @@ export default class Hoop extends Rect {
 
 class ScoreHitbox extends Rect {
     constructor(hoop, hoopSide) {
-        super({ width: CONSTANTS.HOOP_WIDTH - 30, height: CONSTANTS.HOOP_HEIGHT - 5 })
+        super({ width: CONSTANTS.HOOP_WIDTH - 30, height: CONSTANTS.HOOP_HEIGHT * 0.05 })
         const x = hoopSide === "LEFT" ? (
             hoop.position.x + 15
         ) : (

@@ -23,6 +23,7 @@ export default class Ball extends Circle {
         this.color = "hotpink"
         this.possession = null
         this.noTouch = {}
+        this.power = 0
     }
 
     animate(ctx) {
@@ -44,20 +45,31 @@ export default class Ball extends Circle {
 
 
     shoot () {
+        this.power += 1
         const shootingPlayer = this.possession
-        this.position.x = shootingPlayer.facingRight ? 
+        this.position.x = shootingPlayer.facingRight ?
             (shootingPlayer.position.x + shootingPlayer.width + this.radius) :
             (shootingPlayer.position.x - this.radius)
-        this.position.y = shootingPlayer.position.y - this.radius
+        this.position.y = shootingPlayer.position.y
 
-        this.velocity.x = shootingPlayer.facingRight ? 6 : -6
-        this.velocity.y = 15
-        this.possession = null
+        if (this.shootingInterval && this.power < 60) {
+            clearTimeout(this.shootingInterval)
+        }
+        if (this.power < 60) {
+            this.shootingInterval = setTimeout(() => {
 
-        this.noTouch[shootingPlayer] = true        
-        setTimeout(() => {
-            this.noTouch[shootingPlayer] = false
-        }, 500);
+        
+                this.velocity.x = shootingPlayer.facingRight ? 6 : -6
+                this.velocity.y = this.power
+                this.possession = null
+        
+                this.noTouch[shootingPlayer] = true        
+                setTimeout(() => {
+                    this.noTouch[shootingPlayer] = false
+                }, 500);
+                this.power = 0
+            }, 20);
+        }
 
     }
 

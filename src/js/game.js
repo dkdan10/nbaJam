@@ -2,6 +2,7 @@ import Player from './player'
 import Court from './court';
 import Hoop from './hoop';
 import Ball from './ball';
+import Scoreboard from './scoreboard';
 
 
 export default class NBAJamGame {
@@ -18,6 +19,8 @@ export default class NBAJamGame {
         this.leftHoop = new Hoop(this.dimensions, "LEFT", this.ball);
         this.rightHoop = new Hoop(this.dimensions, "RIGHT", this.ball);
 
+        this.scoreboard = new Scoreboard(this.dimensions, this.leftHoop, this.rightHoop)
+
         this.player = new Player(this.court, this.ball);
 
         this.animate();
@@ -33,6 +36,8 @@ export default class NBAJamGame {
         this.ball.animate(this.ctx)
         this.leftHoop.animate(this.ctx)
         this.rightHoop.animate(this.ctx)
+
+        this.scoreboard.animate(this.ctx)
         this.court.animate(this.ctx)
 
         // REQUEST NEXT FRAME

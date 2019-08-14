@@ -53,7 +53,7 @@ export default class Player extends Rect {
             this.jumping = true
         }
 
-        if (key.isPressed('x')) {
+        if (key.isPressed('/')) {
             this.preformAction();
         }
 
@@ -66,6 +66,7 @@ export default class Player extends Rect {
 
     preformAction() {
         if (this.ball.possession === this) {
+            // Hold to shoot. 
             this.ball.shoot()
         }
     }
