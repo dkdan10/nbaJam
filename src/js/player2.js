@@ -21,6 +21,7 @@ export default class Player2 extends Player {
         this.color = "black";
         this.jumping = false;
         this.facingRight = false;
+        this.sprite.src = 'src/assets/drakeSmall.png'
     }
 
     move() {

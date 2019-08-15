@@ -29,12 +29,23 @@ export default class Player extends Rect {
         this.color = "red";
         this.jumping = false;
         this.facingRight = true;
+        // this.dennisRodmanHead = new Image();
+        // this.dennisRodmanHead.src = 'src/assets/dennisRodmanHead.png'
+        this.sprite = new Image();
+        this.sprite.src = 'src/assets/rodmanSmall.png'
     }
 
     animate(ctx) {
         this.move();
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+
+        // ctx.drawImage(this.dennisRodmanHead, 
+        //         this.position.x - this.width + (this.dennisRodmanHead.width / 2), 
+        //         this.position.y - this.height + (this.dennisRodmanHead.height / 3))
+        ctx.drawImage(this.sprite,
+                this.position.x - 5,
+            this.position.y - this.sprite.height / 3)
     }
 
     move () {

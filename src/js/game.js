@@ -5,8 +5,6 @@ import Ball from './ball';
 import Scoreboard from './scoreboard';
 import Player2 from './player2';
 import MainMenu from './menu_screens/main_menu';
-import key from './utils/keymaster'
-
 
 export default class NBAJamGame {
     constructor(canvas) {        
@@ -36,9 +34,9 @@ export default class NBAJamGame {
     restart() {
         // START ANIMATION SYCLE
         this.court = new Court(this.dimensions);
-        this.ball = new Ball(this.dimensions, this.court)
-        this.leftHoop = new Hoop(this.dimensions, "LEFT", this.ball);
-        this.rightHoop = new Hoop(this.dimensions, "RIGHT", this.ball);
+        this.leftHoop = new Hoop(this.dimensions, "LEFT");
+        this.rightHoop = new Hoop(this.dimensions, "RIGHT");
+        this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop)
 
         this.scoreboard = new Scoreboard(this.dimensions, this.leftHoop, this.rightHoop)
 
