@@ -152,14 +152,40 @@ export default class Ball extends Circle {
             }
         )
 
-        const numberOfFrames = 50
+        // LAYUP
+        if (150 > Math.hypot(this.position.x - scorePosition.x, this.position.y - scorePosition.y)) {
+            const numberOfFrames = 30
+            const velocityX = (scorePosition.x - this.position.x) / numberOfFrames
+            const velocityY = ((-scorePosition.y + this.position.y) - 0.5 * -CONSTANTS.GRAVITY * (numberOfFrames * numberOfFrames)) / numberOfFrames
 
-        const velocityX = (scorePosition.x - this.position.x) / numberOfFrames
-        const velocityY = ((-scorePosition.y + this.position.y) - 0.5 * -CONSTANTS.GRAVITY * (numberOfFrames * numberOfFrames)) / numberOfFrames
-
-        this.velocity = {
-            x: velocityX,
-            y: velocityY
+            const diff = (this.power - 30) / 100
+            const adjustedX = shootingPlayer.facingRight ? (
+                velocityX + diff
+            ) : (
+                velocityX - diff
+            )
+            this.velocity = {
+                x: adjustedX,
+                y: velocityY
+            }
+        } else {
+            // SHOT
+            const numberOfFrames = 50
+            
+            const velocityX = (scorePosition.x - this.position.x) / numberOfFrames
+            const velocityY = ((-scorePosition.y + this.position.y) - 0.5 * -CONSTANTS.GRAVITY * (numberOfFrames * numberOfFrames)) / numberOfFrames
+    
+            const diff = (this.power - 30) / 10
+            const adjustedX = shootingPlayer.facingRight ? (
+                velocityX + diff
+            ) : (
+                velocityX - diff
+            )
+            this.velocity = {
+                x: adjustedX,
+                y: velocityY
+            }
+    
         }
 
         this.noTouch[shootingPlayer.color] = true
@@ -169,6 +195,7 @@ export default class Ball extends Circle {
 
         this.power = 0
         this.possession = null
+
     }
 
     move() {

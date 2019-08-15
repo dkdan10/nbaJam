@@ -39,7 +39,7 @@ export default class Player2 extends Player {
             this.jumping = true
         }
 
-        if (key.isPressed('x')) {
+        if (key.isPressed('q')) {
             this.preformAction();
         }
 
