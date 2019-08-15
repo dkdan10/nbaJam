@@ -80,11 +80,65 @@ export default class Ball extends Circle {
 
         // AIMBOT SHOOTING
 
+        // const shootingPlayer = this.possession
+        // this.position.x = shootingPlayer.facingRight ?
+        //     (shootingPlayer.position.x + shootingPlayer.width + this.radius) :
+        //     (shootingPlayer.position.x - this.radius)
+        // this.position.y = shootingPlayer.position.y
+
+        // const scorePosition = shootingPlayer.facingRight ? (
+        //     {
+        //         x: this.rightHoop.scoreHitbox.position.x + (this.rightHoop.scoreHitbox.width / 2),
+        //         y: this.rightHoop.scoreHitbox.position.y
+        //     }
+        // ) : (
+        //     {
+        //         x: this.leftHoop.scoreHitbox.position.x + (this.rightHoop.scoreHitbox.width / 2),
+        //         y: this.leftHoop.scoreHitbox.position.y
+        //     }
+
+        // )
+
+        // const numberOfFrames = 50
+
+        // const velocityX = (scorePosition.x - this.position.x) / numberOfFrames
+        // const velocityY = ( (-scorePosition.y + this.position.y) - 0.5 * -CONSTANTS.GRAVITY * (numberOfFrames * numberOfFrames) ) / numberOfFrames
+        
+        // this.velocity = {
+        //     x: velocityX,
+        //     y: velocityY
+        // }
+
+        // this.noTouch[shootingPlayer.color] = true        
+        // setTimeout(() => {
+        //     this.noTouch[shootingPlayer.color] = false
+        // }, 500);
+
+        // this.possession = null
+
+        // POWERBASED AIMED SHOOTING
+
+        this.power += 1
+
         const shootingPlayer = this.possession
         this.position.x = shootingPlayer.facingRight ?
             (shootingPlayer.position.x + shootingPlayer.width + this.radius) :
             (shootingPlayer.position.x - this.radius)
         this.position.y = shootingPlayer.position.y
+
+        if (this.shootingTimeout && this.power < 60) {
+            clearTimeout(this.shootingTimeout)
+        }
+        if (this.power < 60) {
+            this.shootingTimeout = setTimeout(() => {
+                this.releaseBall()
+            }, 20);
+        }
+
+    }
+
+    releaseBall () {
+        const shootingPlayer = this.possession
 
         const scorePosition = shootingPlayer.facingRight ? (
             {
@@ -96,33 +150,26 @@ export default class Ball extends Circle {
                 x: this.leftHoop.scoreHitbox.position.x + (this.rightHoop.scoreHitbox.width / 2),
                 y: this.leftHoop.scoreHitbox.position.y
             }
-
         )
 
         const numberOfFrames = 50
 
         const velocityX = (scorePosition.x - this.position.x) / numberOfFrames
-        const velocityY = ( (-scorePosition.y + this.position.y) - 0.5 * -CONSTANTS.GRAVITY * (numberOfFrames * numberOfFrames) ) / numberOfFrames
-        
+        const velocityY = ((-scorePosition.y + this.position.y) - 0.5 * -CONSTANTS.GRAVITY * (numberOfFrames * numberOfFrames)) / numberOfFrames
+
         this.velocity = {
             x: velocityX,
             y: velocityY
         }
 
-        this.noTouch[shootingPlayer.color] = true        
+        this.noTouch[shootingPlayer.color] = true
         setTimeout(() => {
             this.noTouch[shootingPlayer.color] = false
         }, 500);
 
+        this.power = 0
         this.possession = null
-
     }
-
-    /*
-    d = v^2 / 2g (1 + sqrt(1 + (2g yo/ v^2 sin^0) ) ) sin20
-    Angle of launch = 45 degrees
-    g = -0.5
-    */
 
     move() {
 

@@ -13,7 +13,7 @@ const CONSTANTS = {
 };
 
 export default class Player extends Rect {
-    constructor(court, ball) {
+    constructor(court, ball, spriteSrc) {
         super({ width: CONSTANTS.PLAYER_WIDTH, height: CONSTANTS.PLAYER_HEIGHT })
         this.court = court
         this.ball = ball
@@ -32,7 +32,7 @@ export default class Player extends Rect {
         // this.dennisRodmanHead = new Image();
         // this.dennisRodmanHead.src = 'src/assets/dennisRodmanHead.png'
         this.sprite = new Image();
-        this.sprite.src = 'src/assets/rodmanSmall.png'
+        this.sprite.src = spriteSrc
     }
 
     animate(ctx) {

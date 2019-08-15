@@ -11,8 +11,8 @@ const CONSTANTS = {
 };
 
 export default class Player2 extends Player {
-    constructor(court, ball) {
-        super(court, ball)
+    constructor(court, ball, spriteSrc) {
+        super(court, ball, spriteSrc)
 
         this.position = {
             x: 0,
@@ -21,7 +21,6 @@ export default class Player2 extends Player {
         this.color = "black";
         this.jumping = false;
         this.facingRight = false;
-        this.sprite.src = 'src/assets/drakeSmall.png'
     }
 
     move() {

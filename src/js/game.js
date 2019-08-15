@@ -26,12 +26,12 @@ export default class NBAJamGame {
         if (!this.playingGame) requestAnimationFrame(this.renderMenu.bind(this));
     }
 
-    startGame () {
+    startGame (leftSprite, rightSprite) {
         this.playingGame = true
-        this.restart()
+        this.restart(leftSprite, rightSprite)
     }
 
-    restart() {
+    restart(leftSprite, rightSprite) {
         // START ANIMATION SYCLE
         this.court = new Court(this.dimensions);
         this.leftHoop = new Hoop(this.dimensions, "LEFT");
@@ -40,8 +40,8 @@ export default class NBAJamGame {
 
         this.scoreboard = new Scoreboard(this.dimensions, this.leftHoop, this.rightHoop)
 
-        this.player = new Player(this.court, this.ball);
-        this.player2 = new Player2(this.court, this.ball)
+        this.player = new Player(this.court, this.ball, rightSprite);
+        this.player2 = new Player2(this.court, this.ball, leftSprite);
 
         this.animate();
     }
