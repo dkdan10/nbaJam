@@ -36,7 +36,8 @@
     "postinstall": "webpack && node app.js"
   },
   "engines": {
-    "node": "10.13.0"
+    "node": "10.13.0",
+    "npm": "6.10.2"
   },
   "keywords": [],
   "author": "",
