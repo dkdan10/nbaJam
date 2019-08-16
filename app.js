@@ -24,11 +24,22 @@ io.sockets.on("connection", function(socket) {
     //     id: 10000 * Math.Ra
     // })
     socket.on('disconnect', function() {
+        const socketToRemove = SOCKET_LIST[socket.id]
         delete SOCKET_LIST[socket.id]
+        if (socketToRemove.currentGameId) {
+            const game = GAMES[socketToRemove.currentGameId]
+            if (game && game.leftPlayerId !== socketToRemove.id) {
+                if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("endGameFromDisconnect")
+            } else if (game){
+                if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("endGameFromDisconnect")
+            }
+            delete GAMES[socketToRemove.currentGameId]
+        }
         const playerQindex = PLAYER_QUEUE.indexOf(socket.id);
         if (playerQindex > -1) {
             PLAYER_QUEUE.splice(playerQindex, 1);
         }
+
     })
 
     socket.on('playerAddedToQueue', function() {
@@ -37,66 +48,66 @@ io.sockets.on("connection", function(socket) {
 
     socket.on('charChanged', function(data) {
         const game = GAMES[data.gameId]
-        SOCKET_LIST[game.leftPlayerId].emit("updatedSelectedChars", data)
-        SOCKET_LIST[game.rightPlayerId].emit("updatedSelectedChars", data)
+        if (game && SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updatedSelectedChars", data)
+        if (game && SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updatedSelectedChars", data)
     })
 
     socket.on('leftReady', function(data) {
         const game = GAMES[data.gameId]
         game.leftReady = true
-        if (game.rightReady) {
-            SOCKET_LIST[game.leftPlayerId].emit("startGame", data)
-            SOCKET_LIST[game.rightPlayerId].emit("startGame", data)
-        } else {
-            SOCKET_LIST[game.leftPlayerId].emit("updatedLeftReady", data)
-            SOCKET_LIST[game.rightPlayerId].emit("updatedLeftReady", data)
+        if (game && game.rightReady) {
+            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("startGame", data)
+            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("startGame", data)
+        } else if (game) {
+            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updatedLeftReady", data)
+            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updatedLeftReady", data)
         }
     })
 
     socket.on('rightReady', function (data) {
         const game = GAMES[data.gameId]
         game.rightReady = true
-        if (game.leftReady) {
-            SOCKET_LIST[game.leftPlayerId].emit("startGame", data)
-            SOCKET_LIST[game.rightPlayerId].emit("startGame", data)
-        } else {
-            SOCKET_LIST[game.leftPlayerId].emit("updatedRightReady", data)
-            SOCKET_LIST[game.rightPlayerId].emit("updatedRightReady", data)
+        if (game && game.leftReady) {
+            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("startGame", data)
+            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("startGame", data)
+        } else if (game) {
+            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updatedRightReady", data)
+            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updatedRightReady", data)
         }
     })
 
     socket.on('updateMyPos', function (data) {
         const game = GAMES[data.gameId]
-        if (game.leftPlayerId !== data.fromSocket) {
-            SOCKET_LIST[game.leftPlayerId].emit("updateOtherPos", data)
-        } else {
-            SOCKET_LIST[game.rightPlayerId].emit("updateOtherPos", data)
+        if (game && (game.leftPlayerId !== data.fromSocket)) {
+            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updateOtherPos", data)
+        } else if (game) {
+            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updateOtherPos", data)
         }
     })
 
     socket.on('changeOfPossesion', function (data) {
         const game = GAMES[data.gameId]
-        if (game.leftPlayerId !== data.fromSocket) {
+        if (game && game.leftPlayerId !== data.fromSocket) {
             SOCKET_LIST[game.leftPlayerId].emit("updateBallPossesion", data)
-        } else {
+        } else if (game) {
             SOCKET_LIST[game.rightPlayerId].emit("updateBallPossesion", data)
         }
     })
 
     socket.on('removeBallPossession', function (data) {
         const game = GAMES[data.gameId]
-        if (game.leftPlayerId !== data.fromSocket) {
+        if (game && game.leftPlayerId !== data.fromSocket) {
             SOCKET_LIST[game.leftPlayerId].emit("updateNoBallPossesion", data)
-        } else {
+        } else if (game) {
             SOCKET_LIST[game.rightPlayerId].emit("updateNoBallPossesion", data)
         }
     })
 
     socket.on('updateBallWithPos', function (data) {
         const game = GAMES[data.gameId]
-        if (game.leftPlayerId !== data.fromSocket) {
+        if (game && game.leftPlayerId !== data.fromSocket) {
             SOCKET_LIST[game.leftPlayerId].emit("updateBallPos", data)
-        } else {
+        } else if (game) {
             SOCKET_LIST[game.rightPlayerId].emit("updateBallPos", data)
         }
     })
@@ -122,7 +133,10 @@ setInterval(() => {
                 rightReady: false,
                 gameId: gameObj.id
             })
+            SOCKET_LIST[PLAYER_QUEUE[0]].currentGameId = gameObj.id
+            SOCKET_LIST[PLAYER_QUEUE[1]].currentGameId = gameObj.id
         }
         PLAYER_QUEUE.splice(0,2)
+        console.log(PLAYER_QUEUE)
     }
 }, 1000 / 60);

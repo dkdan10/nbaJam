@@ -111,6 +111,13 @@ export default class NBAJamGame {
         //     this.ball.velocity = data["velocity"]
         //     this.otherPlayer.facingRight = data["otherPlayerFacing"]
         // })
+        socket.on("endGameFromDisconnect", () => {
+            this.playingGame = false
+            this.onlineGameId = null
+            setTimeout(() => {
+                this.showMenu()
+            }, 1000);
+        })
 
         this.runOnline();
     }
@@ -180,6 +187,7 @@ export default class NBAJamGame {
         this.ctx.strokeText(`${text}`, loc.x, loc.y);
         
         this.playingGame = false
+        this.onlineGameId = null
         setTimeout(() => {
             this.showMenu()
         }, 2000);

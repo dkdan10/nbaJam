@@ -52,7 +52,14 @@ export default class CharacterSelect {
             key.unbind('w')
             key.unbind('s')
             key.unbind('enter')
+            this.leftPlayerId = ""
+            this.rightPlayerId = ""
+            this.leftSelected = 0
+            this.rightSelected = 1
+            this.leftReady = false
+            this.rightReady = false
             this.selectedCharacters(this.characters[this.leftSelected].src, this.characters[this.rightSelected].src, this.gameId)
+            this.gameId = null
         })
     }
 
