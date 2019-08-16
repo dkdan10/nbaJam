@@ -100,6 +100,9 @@ export default class NBAJamGame {
         }) 
         socket.on("updateBallPossesion", data => {
             this.ball.possession = this.otherPlayer
+            socket.emit("registeredPossesionChange", {
+                gameId: this.onlineGameId
+            })
         })
         socket.on("updateNoBallPossesion", data => {
             this.ball.possession = null

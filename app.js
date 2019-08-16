@@ -85,13 +85,19 @@ io.sockets.on("connection", function(socket) {
         }
     })
 
+
     socket.on('changeOfPossesion', function (data) {
         const game = GAMES[data.gameId]
-        if (game && game.leftPlayerId !== data.fromSocket) {
+        if (game && !game.justChangedPossesion && game.leftPlayerId !== data.fromSocket) {
             SOCKET_LIST[game.leftPlayerId].emit("updateBallPossesion", data)
-        } else if (game) {
+        } else if (game && !game.justChangedPossesion) {
             SOCKET_LIST[game.rightPlayerId].emit("updateBallPossesion", data)
         }
+        game.justChangedPossesion = true
+    })
+    socket.on('registeredPossesionChange', function (data) {
+        const game = GAMES[data.gameId]
+        game.justChangedPossesion = false
     })
 
     socket.on('removeBallPossession', function (data) {
@@ -137,6 +143,5 @@ setInterval(() => {
             SOCKET_LIST[PLAYER_QUEUE[1]].currentGameId = gameObj.id
         }
         PLAYER_QUEUE.splice(0,2)
-        console.log(PLAYER_QUEUE)
     }
 }, 1000 / 60);
