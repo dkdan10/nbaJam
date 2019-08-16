@@ -35,6 +35,9 @@
     "build": "webpack --config webpack.prod.js  --optimize-minimize",
     "postinstall": "webpack && node app.js"
   },
+  "engines": {
+    "node": "10.13.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"
