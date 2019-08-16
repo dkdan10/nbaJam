@@ -8,7 +8,9 @@ export default class CharacterSelect {
         this.rightSelected = 1
         this.characters = [
             { name: "Rodman", src: "src/assets/rodmanSmall.png"},
-            { name: "Drake", src: "src/assets/drakeSmall.png" }
+            { name: "Drake", src: "src/assets/drakeSmall.png" },
+            { name: "Lebron", src: "src/assets/lebronSmall.png" },
+            { name: "Peach", src: "src/assets/peachSmall.png"}
         ]
         
         this.leftChar = new Image();
@@ -63,13 +65,17 @@ export default class CharacterSelect {
                 this.rightSelected = (this.rightSelected + 1) % this.characters.length
             })
             key('up', () => {
-                this.rightSelected = Math.abs((this.rightSelected - 1) % this.characters.length)
+                this.rightSelected = (this.rightSelected - 1)
+                if (this.rightSelected === -1) this.rightSelected = this.characters.length - 1
             })
             key('w', () => {
                 this.leftSelected = (this.leftSelected + 1) % this.characters.length
+
             })
             key('s', () => {
-                this.leftSelected = Math.abs((this.leftSelected - 1) % this.characters.length)
+                this.leftSelected = (this.leftSelected - 1) % this.characters.length
+                if (this.leftSelected === -1) this.leftSelected = this.characters.length - 1
+
             })
             key('enter', () => {
                 key.unbind('down')
