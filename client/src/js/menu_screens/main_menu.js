@@ -2,9 +2,10 @@ import key from '../utils/keymaster';
 import CharacterSelect from './character_select';
 
 export default class MainMenu {
-    constructor (dimensions, startGame) {
+    constructor (dimensions, startGame, startOnlineGame) {
         this.dimensions = dimensions
         this.startGame = startGame
+        this.startOnlineGame = startOnlineGame
         this.selectedOption = 0
         this.options = ["Start Game", "Online"]
         this.characterSelect = new CharacterSelect(this.dimensions, this.selectedCharacters.bind(this))
@@ -12,10 +13,16 @@ export default class MainMenu {
         this.setupKeyHandlers()
     }
 
-    selectedCharacters (leftSrc, rightSrc) {
+    selectedCharacters (leftSrc, rightSrc, gameId) {
         this.selectingCharacters = false
-        this.startGame(leftSrc, rightSrc)
+        if (this.characterSelect.onlineMode) {
+            const mySide = this.characterSelect.isPlayingLeft ? "LEFT" : "RIGHT"
+            this.startOnlineGame(leftSrc, rightSrc, mySide, gameId)
+        } else {
+            this.startGame(leftSrc, rightSrc)
+        }
     }
+    
 
     render (ctx) {
         ctx.fillStyle = "purple";

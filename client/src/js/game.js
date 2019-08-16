@@ -5,12 +5,13 @@ import Ball from './ball';
 import Scoreboard from './scoreboard';
 import Player2 from './player2';
 import MainMenu from './menu_screens/main_menu';
+import OnlinePlayer from './online_player';
 
 export default class NBAJamGame {
     constructor(canvas) {        
         this.ctx = canvas.getContext("2d");
         this.dimensions = { width: canvas.width, height: canvas.height };
-        this.mainMenu = new MainMenu(this.dimensions, this.startGame.bind(this))
+        this.mainMenu = new MainMenu(this.dimensions, this.startGame.bind(this), this.startOnlineGame.bind(this))
         this.playingGame = false;
         this.renderMenu()
     }
@@ -28,6 +29,12 @@ export default class NBAJamGame {
     startGame (leftSprite, rightSprite) {
         this.playingGame = true
         this.restart(leftSprite, rightSprite)
+    }
+
+    startOnlineGame(leftSprite, rightSprite, mySide, gameId) {
+        this.playingGame = true
+        this.onlineGameId = gameId
+        this.runOnlineGame(leftSprite, rightSprite, mySide)
     }
 
     restart(leftSprite, rightSprite) {
@@ -67,6 +74,105 @@ export default class NBAJamGame {
         if (this.playingGame) requestAnimationFrame(this.animate.bind(this));
     }
 
+    runOnlineGame(leftSprite, rightSprite, mySide) {
+        this.court = new Court(this.dimensions);
+        this.leftHoop = new Hoop(this.dimensions, "LEFT");
+        this.rightHoop = new Hoop(this.dimensions, "RIGHT");
+        this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop)
+
+        this.scoreboard = new Scoreboard(this.dimensions, this.leftHoop, this.rightHoop)
+
+        if (mySide === "LEFT") {
+            this.myPlayer = new OnlinePlayer(this.court, this.ball, leftSprite, "LEFT", true)
+            this.otherPlayer = new OnlinePlayer(this.court, this.ball, rightSprite, "RIGHT", false)
+        } else {
+            this.otherPlayer = new OnlinePlayer(this.court, this.ball, leftSprite, "LEFT", false)
+            this.myPlayer = new OnlinePlayer(this.court, this.ball, rightSprite, "RIGHT", true)
+        }
+
+        socket.on("updateOtherPos", (data) => {
+            this.otherPlayer.position = {
+                x: data["x"],
+                y: data["y"]
+            }
+        }) 
+        this.justUpdatedRightScore = false
+        this.justUpdatedLeftScore = false
+
+
+        socket.on("updateLeftScore", data => {
+            this.leftHoop.score = data["leftScore"]
+            this.justUpdatedLeftScore = true
+        })
+        socket.on("updateRightScore", data => {
+            this.rightHoop.score = data["rightScore"]
+            this.justUpdatedRightScore = true
+        })
+
+        this.runOnline();
+    }
+
+    runOnline () {
+        // CREATES BACKGROUND
+        this.ctx.fillStyle = "orange";
+        this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+
+        // ANIMATE OBJECTS
+        this.otherPlayer.animate(this.ctx)
+        this.myPlayer.animate(this.ctx)
+        
+        this.ball.animate(this.ctx)
+
+        const leftScore = this.leftHoop.score
+        const rightScore = this.leftHoop.score
+        this.leftHoop.animate(this.ctx)
+        this.rightHoop.animate(this.ctx)
+
+        this.updateOnlineScores(leftScore, rightScore)
+
+
+        this.scoreboard.animate(this.ctx)
+        this.court.animate(this.ctx)
+
+        if (this.gameOver()) {
+            this.displayWinner()
+        }
+
+
+        socket.emit("updateMyPos", {
+            gameId: this.onlineGameId,
+            fromSocket: socket.id,
+            x: this.myPlayer.position.x,
+            y: this.myPlayer.position.y
+        })
+        // REQUEST NEXT FRAME
+        if (this.playingGame) requestAnimationFrame(this.runOnline.bind(this));
+    }
+
+    updateOnlineScores(prevLeftScore, prevRightScore) {
+        if (this.leftHoop.score !== prevLeftScore) {
+            if (this.justUpdatedLeftScore) {
+                this.justUpdatedLeftScore = false
+                return
+            }
+            socket.emit("sendLeftScore", {
+                gameId: this.onlineGameId,
+                fromSocket: socket.id,
+                leftScore: this.leftHoop.score
+            })
+        }
+        if (this.rightHoop.score !== prevRightScore) {
+            if (this.justUpdatedRightScore) {
+                this.justUpdatedRightScore = false
+                return
+            }
+            socket.emit("sendRightScore", {
+                gameId: this.onlineGameId,
+                fromSocket: socket.id,
+                rightScore: this.rightHoop.score
+            })
+        }
+    }
 
 
     gameOver () {

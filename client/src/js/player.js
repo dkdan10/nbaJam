@@ -24,7 +24,7 @@ export default class Player extends Rect {
         }
         this.position = {
             x: this.court.width - this.width,
-            y: this.court.position.y - CONSTANTS.PLAYER_HEIGHT
+            y: this.court.position.y - this.height
         }
         this.color = "red";
         this.jumping = false;

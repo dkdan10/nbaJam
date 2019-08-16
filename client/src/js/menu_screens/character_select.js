@@ -18,6 +18,9 @@ export default class CharacterSelect {
         this.leftChar.src = this.characters[this.leftSelected].src
         this.rightChar.src = this.characters[this.rightSelected].src
 
+        this.leftReady = false
+        this.rightReady = false
+
         socket.on("matchFound", data => {
             this.leftPlayerId = data["leftPlayerId"]
             this.rightPlayerId = data["rightPlayerId"]
@@ -32,9 +35,24 @@ export default class CharacterSelect {
         })
 
         socket.on("updatedSelectedChars", data => {
-            console.log("updateSelected")
             this.leftSelected = data["leftSelected"]
             this.rightSelected = data["rightSelected"]
+        })
+
+        socket.on("updatedLeftReady", () => {
+            this.leftReady = true
+        })
+        socket.on("updatedRightReady", () => {
+            this.rightReady = true
+        })
+
+        socket.on("startGame", () => {
+            key.unbind('down')
+            key.unbind('up')
+            key.unbind('w')
+            key.unbind('s')
+            key.unbind('enter')
+            this.selectedCharacters(this.characters[this.leftSelected].src, this.characters[this.rightSelected].src, this.gameId)
         })
     }
 
@@ -54,7 +72,8 @@ export default class CharacterSelect {
         ctx.fillStyle = "white";
 
         if (this.onlineMode) ctx.fillText("Online Mode", loc.x, loc.y - 100)
-        ctx.font = "bold 16pt serif";
+        ctx.font = "bold 12pt serif";
+        if (this.leftReady) ctx.fillText("Ready", loc.x, loc.y - 70)
         if (this.leftPlayerId && this.rightPlayerId) {
             ctx.fillText(`${this.leftPlayerId}`, loc.x, loc.y - 50)
         } else if (this.onlineMode) {
@@ -78,7 +97,8 @@ export default class CharacterSelect {
         ctx.fillStyle = "white";
 
         if (this.onlineMode) ctx.fillText("Online Mode", loc.x, loc.y - 100)
-        ctx.font = "bold 16pt serif";
+        ctx.font = "bold 12pt serif";
+        if (this.rightReady) ctx.fillText("Ready", loc.x, loc.y - 70)
         if (this.leftPlayerId && this.rightPlayerId) {
             ctx.fillText(`${this.rightPlayerId}`, loc.x, loc.y - 50)
         } else if (this.onlineMode) {
@@ -93,7 +113,7 @@ export default class CharacterSelect {
         ctx.drawImage(this.rightChar,
             loc.x - this.rightChar.width / 2,
             loc.y)
-
+ 
     }
 
     setupKeyHandlers() {
@@ -158,6 +178,18 @@ export default class CharacterSelect {
                         socket.emit('charChanged', {
                             rightSelected: this.rightSelected,
                             leftSelected: this.leftSelected,
+                            gameId: this.gameId
+                        })
+                    }
+                })
+
+                key('enter', () => {
+                    if (this.isPlayingLeft) {
+                        socket.emit('leftReady', {
+                            gameId: this.gameId
+                        })
+                    } else if (this.isPlayingRight) {
+                        socket.emit('rightReady', {
                             gameId: this.gameId
                         })
                     }
