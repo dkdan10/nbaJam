@@ -8,7 +8,7 @@ const CONSTANTS = {
 }
 
 export default class Ball extends Circle {
-    constructor (dimensions, court, leftHoop, rightHoop) {
+    constructor(dimensions, court, leftHoop, rightHoop, gameId) {
         super(CONSTANTS.RADIUS)
         this.court = court
         this.dimensions = dimensions
@@ -16,6 +16,8 @@ export default class Ball extends Circle {
         this.rightHoop = rightHoop
         this.leftHoop.ball = this
         this.rightHoop.ball = this
+
+        this.gameId = gameId
 
         this.position = {
             x: this.court.width / 2,
@@ -44,8 +46,15 @@ export default class Ball extends Circle {
         ctx.fill();
         ctx.closePath();
     }
+    
     claimPossession(player) {
-        if (!this.noTouch[player.color]) this.possession = player
+        if (!this.noTouch[player.color]) {
+            this.possession = player
+            socket.emit("changeOfPossesion", {
+                gameId: this.gameId,
+                fromSocket: socket.id
+            })
+        }
     }
 
 
@@ -117,6 +126,7 @@ export default class Ball extends Circle {
         // this.possession = null
 
         // POWERBASED AIMED SHOOTING
+
 
         this.power += 1
 
@@ -194,8 +204,18 @@ export default class Ball extends Circle {
         }, 500);
 
         this.power = 0
-        this.possession = null
+        this.removePossession()
 
+    }
+
+    removePossession() {
+        this.possession = null
+        socket.emit("removeBallPossession", {
+            gameId: this.gameId,
+            fromSocket: socket.id,
+            velocity: this.velocity,
+            position: this.position
+        })
     }
 
     move() {
@@ -227,6 +247,13 @@ export default class Ball extends Circle {
             }
             this.position.y -= this.velocity.y
         }
+        // socket.emit("updateBallWithPos", {
+        //     gameId: this.gameId,
+        //     fromSocket: socket.id,
+        //     velocity: this.velocity,
+        //     position: this.position,
+        //     otherPlayerFacing: this.possession.facingRight
+        // })
     }
 
 

@@ -78,7 +78,7 @@ export default class NBAJamGame {
         this.court = new Court(this.dimensions);
         this.leftHoop = new Hoop(this.dimensions, "LEFT");
         this.rightHoop = new Hoop(this.dimensions, "RIGHT");
-        this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop)
+        this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop, this.onlineGameId)
 
         this.scoreboard = new Scoreboard(this.dimensions, this.leftHoop, this.rightHoop)
 
@@ -93,21 +93,24 @@ export default class NBAJamGame {
         socket.on("updateOtherPos", (data) => {
             this.otherPlayer.position = {
                 x: data["x"],
-                y: data["y"]
+                y: data["y"],
             }
+            this.otherPlayer.facingRight  = data["otherPlayerFacing"]
+            this.otherPlayer.jumping = data["otherPlayerJumping"]
         }) 
-        this.justUpdatedRightScore = false
-        this.justUpdatedLeftScore = false
-
-
-        socket.on("updateLeftScore", data => {
-            this.leftHoop.score = data["leftScore"]
-            this.justUpdatedLeftScore = true
+        socket.on("updateBallPossesion", data => {
+            this.ball.possession = this.otherPlayer
         })
-        socket.on("updateRightScore", data => {
-            this.rightHoop.score = data["rightScore"]
-            this.justUpdatedRightScore = true
+        socket.on("updateNoBallPossesion", data => {
+            this.ball.possession = null
+            this.ball.position = data["position"]
+            this.ball.velocity = data["velocity"]
         })
+        // socket.on("updateBallPos", data => {
+        //     this.ball.position = data["position"]
+        //     this.ball.velocity = data["velocity"]
+        //     this.otherPlayer.facingRight = data["otherPlayerFacing"]
+        // })
 
         this.runOnline();
     }
@@ -123,13 +126,8 @@ export default class NBAJamGame {
         
         this.ball.animate(this.ctx)
 
-        const leftScore = this.leftHoop.score
-        const rightScore = this.leftHoop.score
         this.leftHoop.animate(this.ctx)
         this.rightHoop.animate(this.ctx)
-
-        this.updateOnlineScores(leftScore, rightScore)
-
 
         this.scoreboard.animate(this.ctx)
         this.court.animate(this.ctx)
@@ -143,36 +141,20 @@ export default class NBAJamGame {
             gameId: this.onlineGameId,
             fromSocket: socket.id,
             x: this.myPlayer.position.x,
-            y: this.myPlayer.position.y
+            y: this.myPlayer.position.y,
+            otherPlayerFacing: this.myPlayer.facingRight,
+            otherPlayerJumping: this.myPlayer.jumping
+        })
+        socket.emit("updateBallPos", {
+            gameId: this.onlineGameId,
+            fromSocket: socket.id,
+            x: this.ball.position.x,
+            y: this.ball.position.y
         })
         // REQUEST NEXT FRAME
         if (this.playingGame) requestAnimationFrame(this.runOnline.bind(this));
     }
 
-    updateOnlineScores(prevLeftScore, prevRightScore) {
-        if (this.leftHoop.score !== prevLeftScore) {
-            if (this.justUpdatedLeftScore) {
-                this.justUpdatedLeftScore = false
-                return
-            }
-            socket.emit("sendLeftScore", {
-                gameId: this.onlineGameId,
-                fromSocket: socket.id,
-                leftScore: this.leftHoop.score
-            })
-        }
-        if (this.rightHoop.score !== prevRightScore) {
-            if (this.justUpdatedRightScore) {
-                this.justUpdatedRightScore = false
-                return
-            }
-            socket.emit("sendRightScore", {
-                gameId: this.onlineGameId,
-                fromSocket: socket.id,
-                rightScore: this.rightHoop.score
-            })
-        }
-    }
 
 
     gameOver () {

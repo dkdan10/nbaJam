@@ -74,15 +74,31 @@ io.sockets.on("connection", function(socket) {
         }
     })
 
-    socket.on('sendLeftScore', function (data) {
+    socket.on('changeOfPossesion', function (data) {
         const game = GAMES[data.gameId]
-        SOCKET_LIST[game.leftPlayerId].emit("updateLeftScore", data)
-        SOCKET_LIST[game.rightPlayerId].emit("updateLeftScore", data)
+        if (game.leftPlayerId !== data.fromSocket) {
+            SOCKET_LIST[game.leftPlayerId].emit("updateBallPossesion", data)
+        } else {
+            SOCKET_LIST[game.rightPlayerId].emit("updateBallPossesion", data)
+        }
     })
-    socket.on('sendRightScore', function (data) {
+
+    socket.on('removeBallPossession', function (data) {
         const game = GAMES[data.gameId]
-        SOCKET_LIST[game.leftPlayerId].emit("updateRightScore", data)
-        SOCKET_LIST[game.rightPlayerId].emit("updateRightScore", data)
+        if (game.leftPlayerId !== data.fromSocket) {
+            SOCKET_LIST[game.leftPlayerId].emit("updateNoBallPossesion", data)
+        } else {
+            SOCKET_LIST[game.rightPlayerId].emit("updateNoBallPossesion", data)
+        }
+    })
+
+    socket.on('updateBallWithPos', function (data) {
+        const game = GAMES[data.gameId]
+        if (game.leftPlayerId !== data.fromSocket) {
+            SOCKET_LIST[game.leftPlayerId].emit("updateBallPos", data)
+        } else {
+            SOCKET_LIST[game.rightPlayerId].emit("updateBallPos", data)
+        }
     })
 
     console.log("socket connection")
