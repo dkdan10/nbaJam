@@ -93,11 +93,11 @@ io.sockets.on("connection", function(socket) {
         } else if (game && !game.justChangedPossesion) {
             SOCKET_LIST[game.rightPlayerId].emit("updateBallPossesion", data)
         }
-        game.justChangedPossesion = true
+        if (game) game.justChangedPossesion = true
     })
     socket.on('registeredPossesionChange', function (data) {
         const game = GAMES[data.gameId]
-        game.justChangedPossesion = false
+        if (game) game.justChangedPossesion = false
     })
 
     socket.on('removeBallPossession', function (data) {
