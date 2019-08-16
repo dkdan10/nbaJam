@@ -9,5 +9,13 @@
 </head>
 <body>
     <canvas id="nba-jam-game" width="820" height="480"></canvas>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script> 
+        const socket = io();
+        socket.on('transmitSocketInfo', (data) => {
+            // socket.number = data["number"]
+            console.log(socket)
+        })
+    </script>
 </body>
 </html>

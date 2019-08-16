@@ -9,10 +9,12 @@
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
     "css-loader": "^3.2.0",
+    "express": "^4.17.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.2.0",
+    "socket.io": "^2.2.0",
     "style-loader": "^1.0.0",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
@@ -30,7 +32,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --config webpack.dev.js",
     "watch": "webpack --watch --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js  --optimize-minimize"
+    "build": "webpack --config webpack.prod.js  --optimize-minimize",
+    "postinstall": "webpack && node app.js"
   },
   "keywords": [],
   "author": "",

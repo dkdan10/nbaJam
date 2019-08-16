@@ -6,7 +6,7 @@ export default class MainMenu {
         this.dimensions = dimensions
         this.startGame = startGame
         this.selectedOption = 0
-        this.options = ["Start Game", "Two Players"]
+        this.options = ["Start Game", "Online"]
         this.characterSelect = new CharacterSelect(this.dimensions, this.selectedCharacters.bind(this))
         this.selectingCharacters = false
         this.setupKeyHandlers()
@@ -54,6 +54,15 @@ export default class MainMenu {
                 key.unbind('up')
                 key.unbind('enter')
                 this.selectingCharacters = true
+                this.characterSelect.onlineMode = false
+                this.characterSelect.setupKeyHandlers()
+            } else if (this.selectedOption === 1) {
+                key.unbind('down')
+                key.unbind('up')
+                key.unbind('enter')
+                this.selectingCharacters = true
+                this.characterSelect.onlineMode = true
+                socket.emit('playerAddedToQueue', socket.id)
                 this.characterSelect.setupKeyHandlers()
             }
         })

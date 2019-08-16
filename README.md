@@ -6,7 +6,7 @@ Basketball has been a big part of my life and I want to share the joy of playing
 
 NBA Jam is a relatively simple game; One or two players go head to head on the basketball court in a 2 minute game. The player mechanics are to run, jump, steal, and, of course, shoot the basketball into the hoop. This game was inspired by the original NBA Jam.
 
-![wireframe](./src/assets/wireframe_draft.png)
+![wireframe](./client/src/assets/wireframe_draft.png)
 
 ## Functionality
 Controls:

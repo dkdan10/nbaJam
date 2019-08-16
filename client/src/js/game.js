@@ -13,7 +13,6 @@ export default class NBAJamGame {
         this.mainMenu = new MainMenu(this.dimensions, this.startGame.bind(this))
         this.playingGame = false;
         this.renderMenu()
-        // this.restart();
     }
 
     showMenu() {
