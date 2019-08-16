@@ -40,8 +40,10 @@ export default class Hoop extends Rect {
         if (this.ball.isOverlappingRect(this.scoreHitbox)) {
             if (!this.justScored) this.score += 2
             this.justScored = true
+            this.color = "green"
             setTimeout(() => {
                 this.justScored = false
+                this.color = "purple"
             }, 1000);
             
         }
