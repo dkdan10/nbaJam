@@ -168,7 +168,7 @@ export default class Ball extends Circle {
             const velocityX = (scorePosition.x - this.position.x) / numberOfFrames
             const velocityY = ((-scorePosition.y + this.position.y) - 0.5 * -CONSTANTS.GRAVITY * (numberOfFrames * numberOfFrames)) / numberOfFrames
 
-            const diff = (this.power - 30) / 100
+            const diff = (this.power - 30) / 20
             const adjustedX = shootingPlayer.facingRight ? (
                 velocityX + diff
             ) : (
