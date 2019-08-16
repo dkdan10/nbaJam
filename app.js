@@ -7,7 +7,8 @@ app.get('/', function(req, res) {
 });
 app.use('/client', express.static(__dirname + "/client"))
 
-server.listen(2000)
+const port = process.env.PORT || 8080
+server.listen(port)
 console.log("server started")
 
 const SOCKET_LIST = {}
