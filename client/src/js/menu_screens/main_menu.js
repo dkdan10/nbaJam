@@ -16,6 +16,7 @@ export default class MainMenu {
     selectedCharacters (leftSrc, rightSrc, gameId) {
         this.selectingCharacters = false
         if (this.characterSelect.onlineMode) {
+            this.characterSelect.onlineMode = false
             const mySide = this.characterSelect.isPlayingLeft ? "LEFT" : "RIGHT"
             this.startOnlineGame(leftSrc, rightSrc, mySide, gameId)
         } else {

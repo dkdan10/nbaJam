@@ -53,8 +53,8 @@ export default class CharacterSelect {
             key.unbind('s')
             key.unbind('enter')
             this.selectedCharacters(this.characters[this.leftSelected].src, this.characters[this.rightSelected].src, this.gameId)
-            this.leftPlayerId = ""
-            this.rightPlayerId = ""
+            this.leftPlayerId = null
+            this.rightPlayerId = null
             this.leftSelected = 0
             this.rightSelected = 1
             this.leftReady = false
@@ -154,51 +154,56 @@ export default class CharacterSelect {
             } else {
 
                 key('up', () => {
-                    if (this.isPlayingLeft) {
-                        this.leftSelected = (this.leftSelected + 1) % this.characters.length
-                        socket.emit('charChanged', {
-                            rightSelected: this.rightSelected,
-                            leftSelected: this.leftSelected,
-                            gameId: this.gameId
-                        })
-                    } else if (this.isPlayingRight) {
-                        this.rightSelected = (this.rightSelected - 1)
-                        if (this.rightSelected === -1) this.rightSelected = this.characters.length - 1
-                        socket.emit('charChanged', {
-                            rightSelected: this.rightSelected,
-                            leftSelected: this.leftSelected,
-                            gameId: this.gameId
-                        })
+                    if(this.gameId) {
+                        if (this.isPlayingLeft) {
+                            this.leftSelected = (this.leftSelected + 1) % this.characters.length
+                            socket.emit('charChanged', {
+                                rightSelected: this.rightSelected,
+                                leftSelected: this.leftSelected,
+                                gameId: this.gameId
+                            })
+                        } else if (this.isPlayingRight) {
+                            this.rightSelected = (this.rightSelected - 1)
+                            if (this.rightSelected === -1) this.rightSelected = this.characters.length - 1
+                            socket.emit('charChanged', {
+                                rightSelected: this.rightSelected,
+                                leftSelected: this.leftSelected,
+                                gameId: this.gameId
+                            })
+                        }
                     }
                 })
                 key('down', () => {
-                    if (this.isPlayingLeft) {
-                        this.leftSelected = (this.leftSelected - 1) % this.characters.length
-                        if (this.leftSelected === -1) this.leftSelected = this.characters.length - 1
-                        socket.emit('charChanged', {
-                            rightSelected: this.rightSelected,
-                            leftSelected: this.leftSelected,
-                            gameId: this.gameId
-                        })
-                    } else if (this.isPlayingRight) {
-                        this.rightSelected = (this.rightSelected + 1) % this.characters.length
-                        socket.emit('charChanged', {
-                            rightSelected: this.rightSelected,
-                            leftSelected: this.leftSelected,
-                            gameId: this.gameId
-                        })
+                    if (this.gameId) {
+                        if (this.isPlayingLeft) {
+                            this.leftSelected = (this.leftSelected - 1) % this.characters.length
+                            if (this.leftSelected === -1) this.leftSelected = this.characters.length - 1
+                            socket.emit('charChanged', {
+                                rightSelected: this.rightSelected,
+                                leftSelected: this.leftSelected,
+                                gameId: this.gameId
+                            })
+                        } else if (this.isPlayingRight) {
+                            this.rightSelected = (this.rightSelected + 1) % this.characters.length
+                            socket.emit('charChanged', {
+                                rightSelected: this.rightSelected,
+                                leftSelected: this.leftSelected,
+                                gameId: this.gameId
+                            })
+                        }
                     }
                 })
-
                 key('enter', () => {
-                    if (this.isPlayingLeft) {
-                        socket.emit('leftReady', {
-                            gameId: this.gameId
-                        })
-                    } else if (this.isPlayingRight) {
-                        socket.emit('rightReady', {
-                            gameId: this.gameId
-                        })
+                    if(this.gameId) {
+                        if (this.isPlayingLeft) {
+                            socket.emit('leftReady', {
+                                gameId: this.gameId
+                            })
+                        } else if (this.isPlayingRight) {
+                            socket.emit('rightReady', {
+                                gameId: this.gameId
+                            })
+                        }
                     }
                 })
 
