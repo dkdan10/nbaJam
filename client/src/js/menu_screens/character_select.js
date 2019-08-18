@@ -55,6 +55,8 @@ export default class CharacterSelect {
             this.selectedCharacters(this.characters[this.leftSelected].src, this.characters[this.rightSelected].src, this.gameId)
             this.leftPlayerId = null
             this.rightPlayerId = null
+            this.isPlayingLeft = false
+            this.isPlayingRight = false
             this.leftSelected = 0
             this.rightSelected = 1
             this.leftReady = false

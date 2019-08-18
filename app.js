@@ -44,6 +44,7 @@ io.sockets.on("connection", function(socket) {
 
     socket.on('playerAddedToQueue', function() {
         PLAYER_QUEUE.push(socket.id)
+        checkQueue()
     })
 
     socket.on('charChanged', function(data) {
@@ -122,8 +123,7 @@ io.sockets.on("connection", function(socket) {
 })
 
 
-
-setInterval(() => {
+const checkQueue = () => {
     if (PLAYER_QUEUE.length > 1) {
         const gameObj = {
             id: new Date().getTime(),
@@ -144,4 +144,4 @@ setInterval(() => {
         }
         PLAYER_QUEUE.splice(0,2)
     }
-}, 1000 / 60);
+}
