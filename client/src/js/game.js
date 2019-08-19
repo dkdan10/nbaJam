@@ -57,6 +57,7 @@ export default class NBAJamGame {
         this.ctx.fillStyle = "orange";
         this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
         
+        this.court.animate(this.ctx)
         // ANIMATE OBJECTS
         this.player.animate(this.ctx)
         this.player2.animate(this.ctx)
@@ -65,7 +66,6 @@ export default class NBAJamGame {
         this.rightHoop.animate(this.ctx)
         
         this.scoreboard.animate(this.ctx)
-        this.court.animate(this.ctx)
         
         if (this.gameOver()) {
             this.displayWinner()
@@ -130,6 +130,7 @@ export default class NBAJamGame {
         this.ctx.fillStyle = "orange";
         this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
 
+        this.court.animate(this.ctx)
         // ANIMATE OBJECTS
         this.otherPlayer.animate(this.ctx)
         this.myPlayer.animate(this.ctx)
@@ -140,7 +141,6 @@ export default class NBAJamGame {
         this.rightHoop.animate(this.ctx)
 
         this.scoreboard.animate(this.ctx)
-        this.court.animate(this.ctx)
 
         if (this.gameOver()) {
             this.displayWinner()
