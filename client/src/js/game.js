@@ -8,8 +8,9 @@ import MainMenu from './menu_screens/main_menu';
 import OnlinePlayer from './online_player';
 
 export default class NBAJamGame {
-    constructor(canvas) {        
+    constructor(canvas, backgroundCanvas) {        
         this.ctx = canvas.getContext("2d");
+        this.backgroundCanvas = backgroundCanvas
         this.dimensions = { width: canvas.width, height: canvas.height };
         this.mainMenu = new MainMenu(this.dimensions, this.startGame.bind(this), this.startOnlineGame.bind(this))
         this.playingGame = false;
@@ -39,7 +40,7 @@ export default class NBAJamGame {
 
     restart(leftSprite, rightSprite) {
         // START ANIMATION SYCLE
-        this.court = new Court(this.dimensions);
+        this.court = new Court(this.dimensions, this.backgroundCanvas);
         this.leftHoop = new Hoop(this.dimensions, "LEFT");
         this.rightHoop = new Hoop(this.dimensions, "RIGHT");
         this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop)
@@ -54,8 +55,10 @@ export default class NBAJamGame {
     
     animate() {        
         // CREATES BACKGROUND
-        this.ctx.fillStyle = "orange";
-        this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        // this.ctx.fillStyle = "orange";
+        // this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
+
         
         this.court.animate(this.ctx)
         // ANIMATE OBJECTS
@@ -75,7 +78,7 @@ export default class NBAJamGame {
     }
 
     runOnlineGame(leftSprite, rightSprite, mySide) {
-        this.court = new Court(this.dimensions);
+        this.court = new Court(this.dimensions, this.backgroundCanvas);
         this.leftHoop = new Hoop(this.dimensions, "LEFT");
         this.rightHoop = new Hoop(this.dimensions, "RIGHT");
         this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop, this.onlineGameId)
@@ -127,8 +130,10 @@ export default class NBAJamGame {
 
     runOnline () {
         // CREATES BACKGROUND
-        this.ctx.fillStyle = "orange";
-        this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        // this.ctx.fillStyle = "orange";
+        // this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
+
 
         this.court.animate(this.ctx)
         // ANIMATE OBJECTS

@@ -6,8 +6,9 @@ const CONSTANTS = {
 };
 
 export default class Court extends Rect {
-    constructor(dimensions) {
+    constructor(dimensions, backgroundCavas) {
         super({ width: dimensions.width, height: CONSTANTS.COURT_WIDTH })
+        this.dimensions = dimensions
         this.position = {
             x: 0,
             y: dimensions.height * CONSTANTS.COURT_FLOOR
@@ -15,11 +16,26 @@ export default class Court extends Rect {
         this.color = "green"
         this.courtImage = new Image();
         this.courtImage.src = "src/assets/bballcourtsmall.png"
+        this.setupBackgroundCourt(backgroundCavas)
+    }  
+
+    setupBackgroundCourt(canvas) {
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "orange";
+        ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        this.courtImage.onload = () => {
+            ctx.drawImage(this.courtImage,
+                this.position.x - this.courtImage.width / 12, 
+                this.position.y - this.courtImage.height / 2,
+                this.width + this.courtImage.width / 6,
+                this.courtImage.height);
+        }
+
     }
 
     animate(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     //     ctx.drawImage(this.courtImage,
     //         this.position.x - this.courtImage.width / 12, 
     //         this.position.y - this.courtImage.height / 2,
