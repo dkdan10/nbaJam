@@ -20,11 +20,11 @@ export default class Court extends Rect {
     animate(ctx) {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-        ctx.drawImage(this.courtImage,
-            this.position.x - this.courtImage.width / 12, 
-            this.position.y - this.courtImage.height / 2,
-            this.width + this.courtImage.width / 6,
-            this.courtImage.height);
+    //     ctx.drawImage(this.courtImage,
+    //         this.position.x - this.courtImage.width / 12, 
+    //         this.position.y - this.courtImage.height / 2,
+    //         this.width + this.courtImage.width / 6,
+    //         this.courtImage.height);
     }
 
 }
