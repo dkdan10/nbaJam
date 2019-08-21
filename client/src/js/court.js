@@ -2,7 +2,13 @@ import Rect from "./utils/rect";
 
 const CONSTANTS = {
     COURT_FLOOR: 0.85,
-    COURT_WIDTH: 5
+    COURT_WIDTH: 5,
+    HOOP_Y_MULTIPLIER: 0.3,
+    HOOP_HEIGHT: 40,
+    HOOP_WIDTH: 50,
+    HOOP_X_DISTANCE: 50,
+    BACKBOARD_WIDTH: 15,
+    BACKBOARD_HEIGHT: 50
 };
 
 export default class Court extends Rect {
@@ -13,6 +19,19 @@ export default class Court extends Rect {
             x: 0,
             y: dimensions.height * CONSTANTS.COURT_FLOOR
         }
+        this.hoopLeftPosition = {
+            x: 0 + CONSTANTS.HOOP_X_DISTANCE - 6,
+            y: dimensions.height * CONSTANTS.HOOP_Y_MULTIPLIER
+        }
+        this.hoopRightPosition = {
+            x: dimensions.width - CONSTANTS.HOOP_X_DISTANCE - CONSTANTS.HOOP_WIDTH - CONSTANTS.BACKBOARD_WIDTH,
+            y: dimensions.height * CONSTANTS.HOOP_Y_MULTIPLIER
+        }
+        this.leftHoopImage = new Image();
+        this.rightHoopImage = new Image();
+        this.leftHoopImage.src = "src/assets/cartoonHoopLeft.png"
+        this.rightHoopImage.src = "src/assets/cartoonHoopRight.png"
+
         this.color = "green"
         this.courtImage = new Image();
         this.courtImage.src = "src/assets/bballcourtsmall.png"
@@ -29,6 +48,20 @@ export default class Court extends Rect {
                 this.position.y - this.courtImage.height / 2,
                 this.width + this.courtImage.width / 6,
                 this.courtImage.height);
+        }
+        this.leftHoopImage.onload = () => {
+            ctx.drawImage(this.leftHoopImage,
+                this.hoopLeftPosition.x,
+                this.hoopLeftPosition.y - (CONSTANTS.HOOP_HEIGHT + 5),
+                CONSTANTS.HOOP_WIDTH + CONSTANTS.BACKBOARD_WIDTH + 10,
+                CONSTANTS.HOOP_HEIGHT + CONSTANTS.BACKBOARD_HEIGHT)
+        }
+        this.rightHoopImage.onload = () => {
+            ctx.drawImage(this.rightHoopImage,
+                this.hoopRightPosition.x,
+                this.hoopRightPosition.y - (CONSTANTS.HOOP_HEIGHT + 5),
+                CONSTANTS.HOOP_WIDTH + CONSTANTS.BACKBOARD_WIDTH + 10,
+                CONSTANTS.HOOP_HEIGHT + CONSTANTS.BACKBOARD_HEIGHT)
         }
 
     }
