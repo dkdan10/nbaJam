@@ -36,7 +36,7 @@ export default class Hoop extends Rect {
         // this.backboard.animate(ctx)
         // ctx.fillStyle = this.color;
         // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-        this.scoreHitbox.animate(ctx)
+        // this.scoreHitbox.animate(ctx)
         if (this.ball.isOverlappingRect(this.scoreHitbox)) {
             if (!this.justScored) this.score += 2
             this.justScored = true
