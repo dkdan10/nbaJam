@@ -1,7 +1,8 @@
 .canvas-wrapper {
     position: relative;
-    width: 400px;
-    height: 300px;
+    width: 820px;
+    height: 480px;
+    margin: 0 auto;
 }
 
 .canvas-wrapper canvas {
