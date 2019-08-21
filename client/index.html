@@ -13,6 +13,30 @@
         <canvas id="nba-jam-background" width="820" height="480"></canvas>
         <canvas id="nba-jam-game" width="820" height="480"></canvas>
     </div>
+    <div class="instructions-container">
+        <h3>Navigate Game Menus with arrow keys. Select option with enter.</h3>
+        <h1>Instructions</h1>
+        <div class="instructions">
+            <div class="online-instructions">
+                <h3>Online:</h3>
+                <p>Right Arrow: Move Right</p>
+                <p>Left Arrow: Move left</p>
+                <p>Up Arrow: Jump</p>
+                <p>Space Bar: Shoot ball. Hold to shoot</p>
+            </div>
+            <div class="offline-instructions">
+                <h3>Offline:</h3>
+                <p>Right Arrow: Move Player 2 Right</p>
+                <p>Left Arrow: Move Player 2 left</p>
+                <p>Up Arrow: Player 2 Jump</p>
+                <p>/: Player 2 shoot ball. Hold to shoot</p>
+                <p>d: Move Player 1 Right</p>
+                <p>a: Move Player 1 left</p>
+                <p>w Arrow: Player 1 Jump</p>
+                <p>q: Player 1 shoot ball. Hold to shoot</p>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script> 
         const socket = io();

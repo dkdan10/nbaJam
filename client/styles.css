@@ -10,3 +10,18 @@
     top: 0;
     left: 0;
 }
+
+.instructions-container {
+    text-align: center;
+}
+
+.instructions-container .instructions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+
+.instructions-container .instructions .offline-instructions {
+    margin-left: 20px;
+}
