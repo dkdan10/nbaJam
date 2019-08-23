@@ -74,7 +74,11 @@ export default class NBAJamGame {
             this.displayWinner()
         }
         // REQUEST NEXT FRAME
-        if (this.playingGame) requestAnimationFrame(this.animate.bind(this));
+        if (this.playingGame) {
+            setTimeout( () => {
+                requestAnimationFrame(this.animate.bind(this));
+            }, 1000 / 60)
+        }
     }
 
     runOnlineGame(leftSprite, rightSprite, mySide) {
@@ -167,7 +171,11 @@ export default class NBAJamGame {
             y: this.ball.position.y
         })
         // REQUEST NEXT FRAME
-        if (this.playingGame) requestAnimationFrame(this.runOnline.bind(this));
+            if (this.playingGame) {
+                setTimeout(() => {
+                    requestAnimationFrame(this.runOnline.bind(this));
+                }, 1000 / 60)
+            }
     }
 
 
