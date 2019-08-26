@@ -57,6 +57,7 @@ export default class CharacterSelect {
             this.rightPlayerId = null
             this.isPlayingLeft = false
             this.isPlayingRight = false
+            this.onlineMode = false
             this.leftSelected = 0
             this.rightSelected = 1
             this.leftReady = false
