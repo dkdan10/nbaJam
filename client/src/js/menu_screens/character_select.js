@@ -147,6 +147,7 @@ export default class CharacterSelect {
     
                 })
                 key('enter', () => {
+                    debugger
                     key.unbind('down')
                     key.unbind('up')
                     key.unbind('w')
@@ -154,10 +155,10 @@ export default class CharacterSelect {
                     key.unbind('enter')
                     this.selectedCharacters(this.characters[this.leftSelected].src, this.characters[this.rightSelected].src)
                 })
-            } else {
+            } else if (this.onlineMode) {
 
                 key('up', () => {
-                    if(this.gameId) {
+                    if(this.gameId && this.onlineMode) {
                         if (this.isPlayingLeft) {
                             this.leftSelected = (this.leftSelected + 1) % this.characters.length
                             socket.emit('charChanged', {
@@ -177,7 +178,8 @@ export default class CharacterSelect {
                     }
                 })
                 key('down', () => {
-                    if (this.gameId) {
+                    debugger
+                    if (this.gameId && this.onlineMode) {
                         if (this.isPlayingLeft) {
                             this.leftSelected = (this.leftSelected - 1) % this.characters.length
                             if (this.leftSelected === -1) this.leftSelected = this.characters.length - 1
@@ -197,7 +199,7 @@ export default class CharacterSelect {
                     }
                 })
                 key('enter', () => {
-                    if(this.gameId) {
+                    if (this.gameId && this.onlineMode) {
                         if (this.isPlayingLeft) {
                             socket.emit('leftReady', {
                                 gameId: this.gameId

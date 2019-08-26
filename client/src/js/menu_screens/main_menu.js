@@ -28,7 +28,6 @@ export default class MainMenu {
     render (ctx) {
         ctx.fillStyle = "purple";
         ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
-        
         if (!this.selectingCharacters) {
             this.options.forEach((option, i) => {
                 const loc = { x: this.dimensions.width / 2, y: this.dimensions.height / ((this.options.length + 1) - i) }
@@ -52,19 +51,22 @@ export default class MainMenu {
     setupKeyHandlers() {
         key('down', () => {
             this.selectedOption = (this.selectedOption + 1) % this.options.length
+            debugger
         })
         key('up', () => {
             this.selectedOption = Math.abs((this.selectedOption - 1) % this.options.length)
+            debugger
         })
         key('enter', () => {
-            if (this.selectedOption === 0) {
+            debugger
+            if (this.selectedOption === 0 && !this.selectingCharacters) {
                 key.unbind('down')
                 key.unbind('up')
                 key.unbind('enter')
                 this.selectingCharacters = true
                 this.characterSelect.onlineMode = false
                 this.characterSelect.setupKeyHandlers()
-            } else if (this.selectedOption === 1) {
+            } else if (this.selectedOption === 1 && !this.selectingCharacters) {
                 key.unbind('down')
                 key.unbind('up')
                 key.unbind('enter')

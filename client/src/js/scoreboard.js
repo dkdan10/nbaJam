@@ -3,7 +3,7 @@ export default class Scoreboard {
         this.dimensions = dimensions
         this.leftHoop = leftHoop
         this.rightHoop = rightHoop
-        this.timeLeft = 60
+        this.timeLeft = 10
         this.countDown = setInterval(() => { 
             this.timeLeft--
             if (this.timeLeft === 0) clearInterval(this.countDown)
