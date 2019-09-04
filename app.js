@@ -6,6 +6,7 @@ app.get('/', function(req, res) {
     res.sendFile(__dirname + '/client/index.html')
 });
 app.use('/', express.static(__dirname + "/client"))
+app.use('/client', express.static(__dirname + "/client"))
 
 const port = process.env.PORT || 8080
 server.listen(port)
