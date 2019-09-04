@@ -147,7 +147,6 @@ export default class CharacterSelect {
     
                 })
                 key('enter', () => {
-                    debugger
                     key.unbind('down')
                     key.unbind('up')
                     key.unbind('w')
@@ -178,7 +177,6 @@ export default class CharacterSelect {
                     }
                 })
                 key('down', () => {
-                    debugger
                     if (this.gameId && this.onlineMode) {
                         if (this.isPlayingLeft) {
                             this.leftSelected = (this.leftSelected - 1) % this.characters.length

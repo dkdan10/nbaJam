@@ -51,14 +51,11 @@ export default class MainMenu {
     setupKeyHandlers() {
         key('down', () => {
             this.selectedOption = (this.selectedOption + 1) % this.options.length
-            debugger
         })
         key('up', () => {
             this.selectedOption = Math.abs((this.selectedOption - 1) % this.options.length)
-            debugger
         })
         key('enter', () => {
-            debugger
             if (this.selectedOption === 0 && !this.selectingCharacters) {
                 key.unbind('down')
                 key.unbind('up')
