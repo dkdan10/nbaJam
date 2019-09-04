@@ -89,15 +89,14 @@ overflow:visible;
 }
 
 
-
-.main-menu .i {
+.main-menu i {
     position:relative;
     display:table-cell;
     width:60px;
     height:36px;
     text-align:center;
     vertical-align:middle;
-    font-size:18px;
+    font-size:28px;
 }
 
 .main-menu .label {
