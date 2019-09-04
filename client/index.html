@@ -6,13 +6,67 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="./dist/main.js"></script>
     <link rel="stylesheet" href="./styles.css">
+    <script src="https://kit.fontawesome.com/caa36ac162.js"></script>
     <title>NBA Jam</title>
 </head>
 <body>
+    <!-- SIDE BAR -->
+    <nav class="main-menu">
+    
+        <ul class="icons">
+            <li>
+                <a href="https://github.com/dkdan10/nbaJam" target="_blank" label="GitHub">
+                    <i class="fab fa-github"></i>
+                    <span class="label">
+                        GitHub
+                    </span>
+                </a>
+            </li>
+    
+            <li>
+                <a href="https://www.linkedin.com/in/daniel-keinan-ab9a5a148/" target="_blank" label="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                    <span class="label">
+                        LinkedIn
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="https://angel.co/daniel-keinan" target="_blank" label="AngelList">
+                    <i class="fab fa-angellist"></i>
+                    <span class="label">
+                        AngelList
+                    </span>
+                </a>
+            </li>
+    
+            <li>
+                <a href="dkdan10.github.io" target="_blank" label="Personal Portfolio">
+                    <i class="fas fa-briefcase"></i>
+                    <span class="label">
+                        Daniel Keinan Portfolio
+                    </span>
+                </a>
+            </li>
+    
+            <li>
+                <a href="mailto:danielkeinan@icloud.com" label="Personal Portfolio">
+                    <i class="icon fas fa-envelope"></i>
+                    <span class="label">
+                        danielkeinan@icloud.com
+                    </span>
+                </a>
+            </li>
+    
+        </ul>
+    </nav>
+
+    <!-- GAME VIEWS -->
     <div class="canvas-wrapper">
         <canvas id="nba-jam-background" width="820" height="480"></canvas>
         <canvas id="nba-jam-game" width="820" height="480"></canvas>
     </div>
+    <!-- INSTRUCTIONS VIEWS -->
     <div class="instructions-container">
         <h3>Navigate Game Menus with arrow keys. Select option with enter.</h3>
         <h1>Instructions</h1>
@@ -37,6 +91,8 @@
             </div>
         </div>
     </div>
+
+    <!-- SOCKET INIT -->
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script> 
         const socket = io();
