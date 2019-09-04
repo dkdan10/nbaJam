@@ -32,6 +32,10 @@ export default class Court extends Rect {
         this.leftHoopImage.src = "src/assets/cartoonHoopLeft.png"
         this.rightHoopImage.src = "src/assets/cartoonHoopRight.png"
 
+
+        this.standsImage = new Image();
+        this.standsImage.src = "src/assets/basketball-stands.png"
+
         this.color = "green"
         this.courtImage = new Image();
         this.courtImage.src = "src/assets/bballcourtsmall.png"
@@ -49,6 +53,22 @@ export default class Court extends Rect {
                 this.width + this.courtImage.width / 6,
                 this.courtImage.height);
         }
+        this.standsImage.onload = () => {
+            ctx.drawImage(this.standsImage,
+                0,
+                0,
+                this.standsImage.width, this.standsImage.height)
+            ctx.drawImage(this.leftHoopImage,
+                this.hoopLeftPosition.x,
+                this.hoopLeftPosition.y - (CONSTANTS.HOOP_HEIGHT + 5),
+                CONSTANTS.HOOP_WIDTH + CONSTANTS.BACKBOARD_WIDTH + 10,
+                CONSTANTS.HOOP_HEIGHT + CONSTANTS.BACKBOARD_HEIGHT)
+            ctx.drawImage(this.rightHoopImage,
+                this.hoopRightPosition.x,
+                this.hoopRightPosition.y - (CONSTANTS.HOOP_HEIGHT + 5),
+                CONSTANTS.HOOP_WIDTH + CONSTANTS.BACKBOARD_WIDTH + 10,
+                CONSTANTS.HOOP_HEIGHT + CONSTANTS.BACKBOARD_HEIGHT)
+        }
         this.leftHoopImage.onload = () => {
             ctx.drawImage(this.leftHoopImage,
                 this.hoopLeftPosition.x,
@@ -63,6 +83,7 @@ export default class Court extends Rect {
                 CONSTANTS.HOOP_WIDTH + CONSTANTS.BACKBOARD_WIDTH + 10,
                 CONSTANTS.HOOP_HEIGHT + CONSTANTS.BACKBOARD_HEIGHT)
         }
+
 
     }
 
