@@ -61,6 +61,7 @@ export default class NBAJamGame {
 
         
         this.court.animate(this.ctx)
+        this.scoreboard.animate(this.ctx)
         // ANIMATE OBJECTS
         this.player.animate(this.ctx)
         this.player2.animate(this.ctx)
@@ -68,7 +69,6 @@ export default class NBAJamGame {
         this.leftHoop.animate(this.ctx)
         this.rightHoop.animate(this.ctx)
         
-        this.scoreboard.animate(this.ctx)
         
         if (this.gameOver()) {
             this.displayWinner()
