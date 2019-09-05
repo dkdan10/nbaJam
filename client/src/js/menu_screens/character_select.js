@@ -71,18 +71,18 @@ export default class CharacterSelect {
         this.leftChar.src = this.characters[this.leftSelected].src
         this.rightChar.src = this.characters[this.rightSelected].src
 
-        ctx.fillStyle = "purple";
-        ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        // ctx.fillStyle = "#1c2c55";
+        // ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
 
         // LEFT SIDE
         const leftSideChar = this.characters[this.leftSelected]
         let loc = { x: this.dimensions.width / 4, y: this.dimensions.height / 2}
-        ctx.font = "bold 40pt serif";
+        ctx.font = "bold 40pt 'Scoreboard'";
         ctx.textAlign = "center";
         ctx.fillStyle = "white";
 
-        if (this.onlineMode) ctx.fillText("Online Mode", loc.x, loc.y - 100)
-        ctx.font = "bold 12pt serif";
+        if (this.onlineMode) ctx.fillText("Online Mode", this.dimensions.width / 2, loc.y - 80)
+        ctx.font = "bold 12pt 'Scoreboard'";
         if (this.leftReady) ctx.fillText("Ready", loc.x, loc.y - 70)
         if (this.leftPlayerId && this.rightPlayerId) {
             ctx.fillText(`${this.leftPlayerId}`, loc.x, loc.y - 50)
@@ -90,11 +90,11 @@ export default class CharacterSelect {
             ctx.fillText(`${socket.id}`, loc.x, loc.y - 50)
         }
 
-        ctx.font = "bold 40pt serif";
+        ctx.font = "bold 40pt 'Scoreboard'";
         ctx.fillText(`${leftSideChar.name}`, loc.x, loc.y);
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 2;
-        ctx.strokeText(`${leftSideChar.name}`, loc.x, loc.y);
+        // ctx.strokeStyle = "white";
+        // ctx.lineWidth = 1;
+        // ctx.strokeText(`${leftSideChar.name}`, loc.x, loc.y);
         ctx.drawImage(this.leftChar,
             loc.x - this.leftChar.width / 2,
             loc.y)
@@ -102,24 +102,24 @@ export default class CharacterSelect {
         // RIGHT SIDE
         const rightSideChar = this.characters[this.rightSelected]
         loc = { x: this.dimensions.width * 3 / 4, y: this.dimensions.height / 2 }
-        ctx.font = "bold 40pt serif";
+        ctx.font = "bold 40pt 'Scoreboard'";
         ctx.textAlign = "center";
         ctx.fillStyle = "white";
 
-        if (this.onlineMode) ctx.fillText("Online Mode", loc.x, loc.y - 100)
-        ctx.font = "bold 12pt serif";
+        // if (this.onlineMode) ctx.fillText("Online Mode", loc.x, loc.y - 100)
+        ctx.font = "bold 12pt 'Scoreboard'";
         if (this.rightReady) ctx.fillText("Ready", loc.x, loc.y - 70)
         if (this.leftPlayerId && this.rightPlayerId) {
             ctx.fillText(`${this.rightPlayerId}`, loc.x, loc.y - 50)
         } else if (this.onlineMode) {
             ctx.fillText(`Waiting for Player`, loc.x, loc.y - 50)
         }
-        ctx.font = "bold 40pt serif";
+        ctx.font = "bold 40pt 'Scoreboard'";
 
         ctx.fillText(`${rightSideChar.name}`, loc.x, loc.y);
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 2;
-        ctx.strokeText(`${rightSideChar.name}`, loc.x, loc.y);
+        // ctx.strokeStyle = "white";
+        // ctx.lineWidth = 1;
+        // ctx.strokeText(`${rightSideChar.name}`, loc.x, loc.y);
         ctx.drawImage(this.rightChar,
             loc.x - this.rightChar.width / 2,
             loc.y)
