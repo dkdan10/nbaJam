@@ -31,7 +31,7 @@ Main Files:
 * Implement ball logic, where a player can run with a ball and shoot a ball at the hoop.
 * Add score keeping to the game.
 * Allow for two players to play the game.
-* Get AI player to respond to Human player's input and give a little competition. 
+* Add websockets to allow for two players to play against eachother from diffrent computers. 
 
 ## Development timeline
 Day 1
@@ -50,4 +50,5 @@ Day 5
 * Do fifth MVP
 
 Bonus
-* Add websockets to allow for two players to play against eachother from diffrent computers. 
+* Get AI player to respond to Human player's input and give a little competition. 
+
