@@ -120,6 +120,33 @@ io.sockets.on("connection", function(socket) {
         }
     })
 
+    socket.on("updateScore", function (data) {
+        const game = GAMES[data.gameId]
+
+        if (game && !game.justScored) {
+            game.justScored = true
+            setTimeout(() => {
+                game.justScored = false
+            }, 1000)
+            switch (data.addToHoop) {
+                case "LEFT": 
+                    if (!game.justScored) game.leftScore += 2
+                    break;
+                case "RIGHT":
+                    if (!game.justScored) game.rightScore += 2
+                    break;
+                default:
+                    return
+            }
+            const sendData = {
+                leftScore: game.leftScore,
+                rightScore: game.rightScore
+            }
+            SOCKET_LIST[game.leftPlayerId].emit("updateNewScore", sendData)
+            SOCKET_LIST[game.rightPlayerId].emit("updateNewScore", sendData)
+        }
+    })
+
     console.log("socket connection")
 })
 
@@ -129,7 +156,10 @@ const checkQueue = () => {
         const gameObj = {
             id: new Date().getTime(),
             leftPlayerId: PLAYER_QUEUE[0],
-            rightPlayerId: PLAYER_QUEUE[1]
+            rightPlayerId: PLAYER_QUEUE[1],
+            leftScore: 0,
+            rightScore: 0,
+            justScored: false
         }
         GAMES[gameObj.id] = gameObj
         for (let i = 0; i < 2; i++) {

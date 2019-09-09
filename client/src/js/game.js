@@ -83,8 +83,8 @@ export default class NBAJamGame {
 
     runOnlineGame(leftSprite, rightSprite, mySide) {
         this.court = new Court(this.dimensions, this.backgroundCanvas);
-        this.leftHoop = new Hoop(this.dimensions, "LEFT");
-        this.rightHoop = new Hoop(this.dimensions, "RIGHT");
+        this.leftHoop = new Hoop(this.dimensions, "LEFT", this.onlineGameId);
+        this.rightHoop = new Hoop(this.dimensions, "RIGHT", this.onlineGameId);
         this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop, this.onlineGameId)
 
         this.scoreboard = new Scoreboard(this.dimensions, this.leftHoop, this.rightHoop)
@@ -127,6 +127,11 @@ export default class NBAJamGame {
             setTimeout(() => {
                 this.showMenu()
             }, 1000);
+        })
+
+        socket.on("updateNewScore", (data) => {
+            this.leftHoop.score = data["leftScore"]
+            this.rightHoop.score = data["rightScore"]
         })
 
         this.runOnline();

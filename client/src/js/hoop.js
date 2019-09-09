@@ -11,11 +11,12 @@ const CONSTANTS = {
 
 
 export default class Hoop extends Rect {
-    constructor(dimensions, hoopSide, ball) {
+    constructor(dimensions, hoopSide, ball, onlineGameId) {
         super({ width: CONSTANTS.HOOP_WIDTH, height: CONSTANTS.HOOP_HEIGHT })
         this.ball = ball
         this.dimensions = dimensions
         this.hoopSide = hoopSide
+        this.onlineGameId = onlineGameId
 
         const x = hoopSide === "LEFT" ? (
                 0 + CONSTANTS.HOOP_X_DISTANCE
@@ -45,7 +46,14 @@ export default class Hoop extends Rect {
         // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
         // this.scoreHitbox.animate(ctx)
         if (this.ball.isOverlappingRect(this.scoreHitbox)) {
-            if (!this.justScored) this.score += 2
+            if (!this.justScored && this.onlineGameId) {
+                socket.emit("updateScore", {
+                    gameId: this.onlineGameId,
+                    addToHoop: this.hoopSide
+                })
+            } else if (!this.justScored) { 
+                this.score += 2
+            }
             this.justScored = true
             if (this.hoopSide === "LEFT") {
                 ctx.drawImage(this.hoopLeftScored,
