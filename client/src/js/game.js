@@ -132,8 +132,6 @@ export default class NBAJamGame {
         socket.on("updateNewScore", (data) => {
             this.leftHoop.score = data["leftScore"]
             this.rightHoop.score = data["rightScore"]
-            this.leftHoop.justScored = true
-            this.rightHoop.justScored = true
         })
 
         this.runOnline();

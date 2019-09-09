@@ -122,8 +122,7 @@ io.sockets.on("connection", function(socket) {
 
     socket.on("updateScore", function (data) {
         const game = GAMES[data.gameId]
-
-        if (game) {
+        if (game && !game.justScored) {
             switch (data.addToHoop) {
                 case "LEFT": 
                     game.leftScore += 2
@@ -138,8 +137,12 @@ io.sockets.on("connection", function(socket) {
                 leftScore: game.leftScore,
                 rightScore: game.rightScore
             }
-            SOCKET_LIST[game.leftPlayerId].emit("updateNewScore", sendData)
-            SOCKET_LIST[game.rightPlayerId].emit("updateNewScore", sendData)
+            if (!game.justScored) SOCKET_LIST[game.leftPlayerId].emit("updateNewScore", sendData)
+            if (!game.justScored) SOCKET_LIST[game.rightPlayerId].emit("updateNewScore", sendData)
+            game.justScored = true
+            setTimeout(() => {
+                game.justScored = false
+            }, 1000);
         }
     })
 
