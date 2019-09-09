@@ -11,9 +11,9 @@ const CONSTANTS = {
 
 
 export default class Hoop extends Rect {
-    constructor(dimensions, hoopSide, ball, onlineGameId) {
+    constructor(dimensions, hoopSide, onlineGameId) {
         super({ width: CONSTANTS.HOOP_WIDTH, height: CONSTANTS.HOOP_HEIGHT })
-        this.ball = ball
+        // this.ball = ball
         this.dimensions = dimensions
         this.hoopSide = hoopSide
         this.onlineGameId = onlineGameId

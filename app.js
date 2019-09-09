@@ -123,17 +123,13 @@ io.sockets.on("connection", function(socket) {
     socket.on("updateScore", function (data) {
         const game = GAMES[data.gameId]
 
-        if (game && !game.justScored) {
-            game.justScored = true
-            setTimeout(() => {
-                game.justScored = false
-            }, 1000)
+        if (game) {
             switch (data.addToHoop) {
                 case "LEFT": 
-                    if (!game.justScored) game.leftScore += 2
+                    game.leftScore += 2
                     break;
                 case "RIGHT":
-                    if (!game.justScored) game.rightScore += 2
+                    game.rightScore += 2
                     break;
                 default:
                     return
