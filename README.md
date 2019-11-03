@@ -1,5 +1,7 @@
 # nbaJam
 
+Link to live site: https://nba-jam-slam.herokuapp.com/
+
 ## Background and Overview
 
 Basketball has been a big part of my life and I want to share the joy of playing the game with my users. NBA Jam is a game that extends generational boundaries, and with that in mind, my goal is to bring my users an experience that they would share with thier kids for generations as well. 
