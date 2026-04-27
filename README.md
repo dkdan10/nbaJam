@@ -1,56 +1,73 @@
-# nbaJam
+# NBA Jam
 
-Link to live site: https://nba-jam-slam.herokuapp.com/
+A local multiplayer HTML5 Canvas basketball game inspired by NBA Jam. Two players choose characters, run the court, jump, shoot, and try to outscore each other before the clock runs out.
 
-## Background and Overview
-
-Basketball has been a big part of my life and I want to share the joy of playing the game with my users. NBA Jam is a game that extends generational boundaries, and with that in mind, my goal is to bring my users an experience that they would share with thier kids for generations as well. 
-
-NBA Jam is a relatively simple game; One or two players go head to head on the basketball court in a 2 minute game. The player mechanics are to run, jump, steal, and, of course, shoot the basketball into the hoop. This game was inspired by the original NBA Jam.
+Live site: https://dkdan10.github.io/nbaJam/
 
 ![wireframe](./src/assets/wireframe_draft.png)
 
-## Functionality
-Controls:
-* Users use the arrow keys or WSAD in order to controller thier players.
-* Using x or /, a User can get thier player to shoot or steal the ball depending on whether they are on offense or defense. 
+## Controls
 
-Technologies:
-* HTML5 Canvas
-* Vanilla JavaScript
-* Webpack
-* Howler.js
+Player 1:
 
-Main Files:
-* player.js (AIPlayer, HumanPlayer)
-* court.js (Renders the court and the hoops)
-* ball.js (Holds the balls location)
-* hoop.js (Left hoop and right hoop, logic for when a point is scored)
-* scoreboard.js (Middle of the screen, has both scores and countdown.)
+- Move: Arrow keys
+- Jump: Up arrow
+- Shoot: `/`
 
-## MVP Features
-* Court to Render and a player to move along the court.
-* Implement ball logic, where a player can run with a ball and shoot a ball at the hoop.
-* Add score keeping to the game.
-* Allow for two players to play the game.
-* Add websockets to allow for two players to play against eachother from diffrent computers. 
+Player 2:
 
-## Development timeline
-Day 1
-* Do first MVP
+- Move: `A` and `D`
+- Jump: `W`
+- Shoot: `Q`
 
-Day 2
-* Do second MVP
+## Tech Stack
 
-Day 3
-* Clean up first two MVPs work on third MVP.
+- HTML5 Canvas
+- Vanilla JavaScript
+- Vite
+- Vitest
+- GitHub Pages
 
-Day 4
-* Do fourth MVP
+## Setup
 
-Day 5
-* Do fifth MVP
+Install dependencies:
 
-Bonus
-* Get AI player to respond to Human player's input and give a little competition. 
+```sh
+npm install
+```
 
+Start the development server:
+
+```sh
+npm run dev
+```
+
+Run tests:
+
+```sh
+npm test
+```
+
+Build for production:
+
+```sh
+npm run build
+```
+
+Preview the production build:
+
+```sh
+npm run preview
+```
+
+## Project Structure
+
+- `src/index.js` starts the game once the canvas is available.
+- `src/js/game.js` coordinates menu state, gameplay state, and the animation loop.
+- `src/js/player.js` and `src/js/player2.js` handle player movement, jumping, possession, and shooting.
+- `src/js/ball.js`, `src/js/hoop.js`, `src/js/court.js`, and `src/js/scoreboard.js` contain the core game objects.
+- `src/js/menu_screens` contains the main menu and character select screens.
+
+## Deployment
+
+The game is deployed to GitHub Pages with GitHub Actions. Pushes to `master` run tests, build the Vite app, and publish the generated `dist` artifact.

@@ -1,4 +1,8 @@
 import key from '../utils/keymaster';
+import rodmanSprite from '../../assets/rodmanSmall.png';
+import drakeSprite from '../../assets/drakeSmall.png';
+import lebronSprite from '../../assets/lebronSmall.png';
+import peachSprite from '../../assets/peachSmall.png';
 
 export default class CharacterSelect {
     constructor(dimensions, selectedCharacters) {
@@ -7,10 +11,10 @@ export default class CharacterSelect {
         this.leftSelected = 0
         this.rightSelected = 1
         this.characters = [
-            { name: "Rodman", src: "src/assets/rodmanSmall.png"},
-            { name: "Drake", src: "src/assets/drakeSmall.png" },
-            { name: "Lebron", src: "src/assets/lebronSmall.png" },
-            { name: "Peach", src: "src/assets/peachSmall.png"}
+            { name: "Rodman", src: rodmanSprite },
+            { name: "Drake", src: drakeSprite },
+            { name: "Lebron", src: lebronSprite },
+            { name: "Peach", src: peachSprite }
         ]
         
         this.leftChar = new Image();

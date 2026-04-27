@@ -1,25 +1,8 @@
 {
-  "name": "nbaJam",
+  "name": "nbajam",
   "version": "1.0.0",
-  "description": "",
-  "main": "postcss.config.js",
-  "dependencies": {
-    "autoprefixer": "^9.6.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "css-loader": "^3.2.0",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "node-sass": "^4.12.0",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^7.2.0",
-    "style-loader": "^1.0.0",
-    "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.8.0",
-    "webpack-merge": "^4.2.1"
-  },
-  "devDependencies": {},
+  "description": "A local multiplayer HTML5 Canvas basketball game inspired by NBA Jam.",
+  "type": "module",
   "browserslist": [
     "last 1 version",
     "> 1%",
@@ -27,12 +10,21 @@
     "not dead"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config webpack.dev.js",
-    "watch": "webpack --watch --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js  --optimize-minimize"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
   },
-  "keywords": [],
+  "devDependencies": {
+    "jsdom": "^24.1.3",
+    "vite": "^5.4.21",
+    "vitest": "^2.1.9"
+  },
+  "keywords": [
+    "canvas",
+    "basketball",
+    "game"
+  ],
   "author": "",
   "license": "ISC"
 }

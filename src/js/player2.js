@@ -1,4 +1,5 @@
 import Player from "./player";
+import key from './utils/keymaster';
 
 const CONSTANTS = {
     GRAVITY: 0.5,
@@ -40,7 +41,7 @@ export default class Player2 extends Player {
         }
 
         if (key.isPressed('q')) {
-            this.preformAction();
+            this.performAction();
         }
 
         this.checkBall()

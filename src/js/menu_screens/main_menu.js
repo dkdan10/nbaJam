@@ -6,7 +6,7 @@ export default class MainMenu {
         this.dimensions = dimensions
         this.startGame = startGame
         this.selectedOption = 0
-        this.options = ["Start Game", "Two Players"]
+        this.options = ["Start Game"]
         this.characterSelect = new CharacterSelect(this.dimensions, this.selectedCharacters.bind(this))
         this.selectingCharacters = false
         this.setupKeyHandlers()
@@ -49,13 +49,11 @@ export default class MainMenu {
             this.selectedOption = Math.abs((this.selectedOption - 1) % this.options.length)
         })
         key('enter', () => {
-            if (this.selectedOption === 0) {
-                key.unbind('down')
-                key.unbind('up')
-                key.unbind('enter')
-                this.selectingCharacters = true
-                this.characterSelect.setupKeyHandlers()
-            }
+            key.unbind('down')
+            key.unbind('up')
+            key.unbind('enter')
+            this.selectingCharacters = true
+            this.characterSelect.setupKeyHandlers()
         })
 
     }
