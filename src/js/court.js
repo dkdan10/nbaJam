@@ -1,4 +1,4 @@
-import Rect from "./utils/rect";
+import Rect from "./utils/rect.js";
 
 const CONSTANTS = {
     COURT_FLOOR: 0.85,

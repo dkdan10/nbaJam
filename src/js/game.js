@@ -1,10 +1,10 @@
-import Player from './player'
-import Court from './court';
-import Hoop from './hoop';
-import Ball from './ball';
-import Scoreboard from './scoreboard';
-import Player2 from './player2';
-import MainMenu from './menu_screens/main_menu';
+import Player from './player.js'
+import Court from './court.js';
+import Hoop from './hoop.js';
+import Ball from './ball.js';
+import Scoreboard from './scoreboard.js';
+import Player2 from './player2.js';
+import MainMenu from './menu_screens/main_menu.js';
 
 export default class NBAJamGame {
     constructor(canvas) {        

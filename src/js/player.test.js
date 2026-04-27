@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import Player from './player';
-import Player2 from './player2';
+import Player from './player.js';
+import Player2 from './player2.js';
 
 function makeBall() {
   return {

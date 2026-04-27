@@ -1,5 +1,5 @@
-import key from '../utils/keymaster';
-import CharacterSelect from './character_select';
+import key from '../utils/keymaster.js';
+import CharacterSelect from './character_select.js';
 
 export default class MainMenu {
     constructor (dimensions, startGame) {

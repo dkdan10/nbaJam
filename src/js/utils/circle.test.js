@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import Circle from './circle';
+import Circle from './circle.js';
 
 function makeCircle(position, radius = 10) {
   const circle = new Circle(radius);

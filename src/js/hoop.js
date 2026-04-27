@@ -1,4 +1,4 @@
-import Rect from './utils/rect'
+import Rect from './utils/rect.js'
 
 const CONSTANTS = {
     HOOP_Y_MULTIPLIER: 0.3,

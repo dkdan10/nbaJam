@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import Scoreboard from './scoreboard';
+import Scoreboard from './scoreboard.js';
 
 describe('Scoreboard', () => {
   afterEach(() => {

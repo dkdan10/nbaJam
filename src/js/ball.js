@@ -1,4 +1,4 @@
-import Circle from "./utils/circle";
+import Circle from "./utils/circle.js";
 
 const CONSTANTS = {
     RADIUS: 15,

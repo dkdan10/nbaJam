@@ -1,5 +1,5 @@
-import Rect from './utils/rect';
-import key from './utils/keymaster';
+import Rect from './utils/rect.js';
+import key from './utils/keymaster.js';
 
 
 const CONSTANTS = {

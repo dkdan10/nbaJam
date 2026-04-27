@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import Ball from './ball';
+import Ball from './ball.js';
 
 function makeBall() {
   return new Ball(

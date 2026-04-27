@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import Rect from './rect';
+import Rect from './rect.js';
 
 function makeRect(position, size = { width: 20, height: 20 }) {
   const rect = new Rect(size);

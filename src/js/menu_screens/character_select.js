@@ -1,8 +1,9 @@
-import key from '../utils/keymaster';
-import rodmanSprite from '../../assets/rodmanSmall.png';
-import drakeSprite from '../../assets/drakeSmall.png';
-import lebronSprite from '../../assets/lebronSmall.png';
-import peachSprite from '../../assets/peachSmall.png';
+import key from '../utils/keymaster.js';
+
+const rodmanSprite = new URL('../../assets/rodmanSmall.png', import.meta.url).href;
+const drakeSprite = new URL('../../assets/drakeSmall.png', import.meta.url).href;
+const lebronSprite = new URL('../../assets/lebronSmall.png', import.meta.url).href;
+const peachSprite = new URL('../../assets/peachSmall.png', import.meta.url).href;
 
 export default class CharacterSelect {
     constructor(dimensions, selectedCharacters) {

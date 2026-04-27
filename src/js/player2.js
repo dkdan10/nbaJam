@@ -1,5 +1,5 @@
-import Player from "./player";
-import key from './utils/keymaster';
+import Player from "./player.js";
+import key from './utils/keymaster.js';
 
 const CONSTANTS = {
     GRAVITY: 0.5,
