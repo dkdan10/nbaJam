@@ -129,7 +129,9 @@ export default class Ball extends Circle {
         // POWERBASED AIMED SHOOTING
 
 
-        this.power += 1
+        if (!this.possession) return
+
+        this.power = Math.min(this.power + 1, 60)
 
         const shootingPlayer = this.possession
         this.position.x = shootingPlayer.facingRight ?
@@ -137,18 +139,28 @@ export default class Ball extends Circle {
             (shootingPlayer.position.x - this.radius)
         this.position.y = shootingPlayer.position.y
 
-        if (this.shootingTimeout && this.power < 60) {
+        if (this.shootingTimeout) {
             clearTimeout(this.shootingTimeout)
         }
-        if (this.power < 60) {
-            this.shootingTimeout = setTimeout(() => {
-                this.releaseBall()
-            }, 20);
+
+        if (this.power >= 60) {
+            this.releaseBall()
+            return
         }
+
+        this.shootingTimeout = setTimeout(() => {
+            this.releaseBall()
+        }, 20);
 
     }
 
     releaseBall () {
+        if (!this.possession) return
+        if (this.shootingTimeout) {
+            clearTimeout(this.shootingTimeout)
+        }
+        this.shootingTimeout = null
+
         const shootingPlayer = this.possession
 
         const scorePosition = shootingPlayer.facingRight ? (
