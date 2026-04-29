@@ -109,18 +109,20 @@ export default class NBAJamGame {
             this.otherPlayer.jumping = data["otherPlayerJumping"]
         }
         const updateBallPossession = data => {
+            this.ball.hasSyncAuthority = false
             this.ball.possession = this.otherPlayer
             socket.emit("registeredPossessionChange", {
                 gameId: this.onlineGameId
             })
         }
         const updateNoBallPossession = data => {
+            this.ball.hasSyncAuthority = false
             this.ball.possession = null
             this.ball.position = data["position"]
             this.ball.velocity = data["velocity"]
         }
         const updateBallPos = data => {
-            if (this.ball.possession === this.myPlayer) return
+            if (this.ball.hasSyncAuthority) return
             this.ball.position = data["position"] || {
                 x: data["x"],
                 y: data["y"]
@@ -208,12 +210,14 @@ export default class NBAJamGame {
             otherPlayerFacing: this.myPlayer.facingRight,
             otherPlayerJumping: this.myPlayer.jumping
         })
-        socket.emit("updateBallPos", {
-            gameId: this.onlineGameId,
-            fromSocket: socket.id,
-            position: this.ball.position,
-            velocity: this.ball.velocity
-        })
+        if (this.ball.hasSyncAuthority && !this.ball.possession) {
+            socket.emit("updateBallPos", {
+                gameId: this.onlineGameId,
+                fromSocket: socket.id,
+                position: this.ball.position,
+                velocity: this.ball.velocity
+            })
+        }
         // REQUEST NEXT FRAME
         if (this.playingGame) {
         //     setTimeout(() => {

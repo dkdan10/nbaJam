@@ -32,6 +32,7 @@ export default class Ball extends Circle {
         this.possession = null
         this.noTouch = {}
         this.power = 0
+        this.hasSyncAuthority = !gameId
     }
 
     animate(ctx) {
@@ -51,6 +52,7 @@ export default class Ball extends Circle {
     claimPossession(player) {
         if (!this.noTouch[player.color]) {
             this.possession = player
+            this.hasSyncAuthority = true
             socket.emit("changeOfPossession", {
                 gameId: this.gameId,
                 fromSocket: socket.id
@@ -262,7 +264,7 @@ export default class Ball extends Circle {
             }
             this.position.y -= this.velocity.y
         }
-        if (this.gameId) {
+        if (this.gameId && this.hasSyncAuthority) {
             socket.emit("updateBallPos", {
                 gameId: this.gameId,
                 fromSocket: socket.id,

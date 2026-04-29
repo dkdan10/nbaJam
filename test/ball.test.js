@@ -82,4 +82,21 @@ describe("Ball shooting", () => {
 
         expect(() => ball.releaseBall()).not.toThrow();
     });
+
+    it("broadcasts carried ball position only while this client has sync authority", () => {
+        const { ball } = createBall();
+
+        ball.hasSyncAuthority = false;
+        ball.moveWithPlayerPossession();
+
+        expect(socket.emit).not.toHaveBeenCalledWith("updateBallPos", expect.anything());
+
+        ball.hasSyncAuthority = true;
+        ball.moveWithPlayerPossession();
+
+        expect(socket.emit).toHaveBeenCalledWith("updateBallPos", expect.objectContaining({
+            gameId: "game-1",
+            fromSocket: "socket-1"
+        }));
+    });
 });
