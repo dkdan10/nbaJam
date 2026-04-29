@@ -3,7 +3,7 @@ services:
     name: nbajam-multiplayer
     runtime: node
     plan: free
-    buildCommand: npm ci && npm run build
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /healthz
     envVars:

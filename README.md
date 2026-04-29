@@ -2,7 +2,7 @@
 
 NBA Jam Multiplayer is a browser basketball game built with HTML5 Canvas, Express, and Socket.IO. Two players can open the game, choose Online mode, get paired by the server, select characters, and play a realtime one-on-one match.
 
-Live Render URL: _add Render service URL after deployment_
+Live Render URL: https://nbajam-multiplayer.onrender.com
 
 ## Tech Stack
 
