@@ -15,12 +15,6 @@ An NBA Jam-inspired basketball game built with HTML5 Canvas and modern JavaScrip
 | `master` | GitHub Pages | Static/local two-player Canvas game built with Vite |
 | `multiplayer` | Render | Full realtime version with online matchmaking, Express, Socket.IO, and improved assets |
 
-## Why Two Hosts?
-
-GitHub Pages can host static files, so it is a good fit for the local two-player version. Online multiplayer needs a persistent Node server and WebSocket support, so the full realtime version runs on Render.
-
-For portfolio review, the Render-hosted multiplayer demo is the canonical version of the project.
-
 ## Controls
 
 Player 1:
