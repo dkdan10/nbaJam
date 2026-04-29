@@ -1,4 +1,5 @@
 import Rect from './utils/rect.js'
+import assets from './assets.js'
 
 const CONSTANTS = {
     HOOP_Y_MULTIPLIER: 0.3,
@@ -11,10 +12,11 @@ const CONSTANTS = {
 
 
 export default class Hoop extends Rect {
-    constructor(dimensions, hoopSide, ball) {
+    constructor(dimensions, hoopSide) {
         super({ width: CONSTANTS.HOOP_WIDTH, height: CONSTANTS.HOOP_HEIGHT })
-        this.ball = ball
         this.dimensions = dimensions
+        this.hoopSide = hoopSide
+
         const x = hoopSide === "LEFT" ? (
                 0 + CONSTANTS.HOOP_X_DISTANCE
             ) : (
@@ -29,17 +31,33 @@ export default class Hoop extends Rect {
         this.color = "purple"
         this.score = 0
         this.justScored = false
+
+        this.hoopLeftScored = new Image();
+        this.hoopLeftScored.src = assets.hoopLeftScored
+        this.hoopRightScored = new Image();
+        this.hoopRightScored.src = assets.hoopRightScored
     }
 
     animate(ctx) {
         this.checkBallCollision()
-        this.backboard.animate(ctx)
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
-        this.scoreHitbox.animate(ctx)
         if (this.ball.isOverlappingRect(this.scoreHitbox)) {
             if (!this.justScored) this.score += 2
             this.justScored = true
+            if (this.hoopSide === "LEFT") {
+                ctx.drawImage(this.hoopLeftScored,
+                    this.position.x - 5,
+                    this.position.y - (CONSTANTS.HOOP_HEIGHT + 5),
+                    CONSTANTS.HOOP_WIDTH + CONSTANTS.BACKBOARD_WIDTH + 10,
+                    CONSTANTS.HOOP_HEIGHT + CONSTANTS.BACKBOARD_HEIGHT
+                )
+            } else if (this.hoopSide === "RIGHT") {
+                ctx.drawImage(this.hoopRightScored,
+                    this.position.x - 15,
+                    this.position.y - (CONSTANTS.HOOP_HEIGHT + 5),
+                    CONSTANTS.HOOP_WIDTH + CONSTANTS.BACKBOARD_WIDTH + 10,
+                    CONSTANTS.HOOP_HEIGHT + CONSTANTS.BACKBOARD_HEIGHT
+                )
+            }
             this.color = "green"
             setTimeout(() => {
                 this.justScored = false

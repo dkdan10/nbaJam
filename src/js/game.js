@@ -7,8 +7,9 @@ import Player2 from './player2.js';
 import MainMenu from './menu_screens/main_menu.js';
 
 export default class NBAJamGame {
-    constructor(canvas) {        
+    constructor(canvas, backgroundCanvas) {        
         this.ctx = canvas.getContext("2d");
+        this.backgroundCanvas = backgroundCanvas
         this.dimensions = { width: canvas.width, height: canvas.height };
         this.mainMenu = new MainMenu(this.dimensions, this.startGame.bind(this))
         this.playingGame = false;
@@ -33,7 +34,7 @@ export default class NBAJamGame {
 
     restart(leftSprite, rightSprite) {
         // START ANIMATION SYCLE
-        this.court = new Court(this.dimensions);
+        this.court = new Court(this.dimensions, this.backgroundCanvas);
         this.leftHoop = new Hoop(this.dimensions, "LEFT");
         this.rightHoop = new Hoop(this.dimensions, "RIGHT");
         this.ball = new Ball(this.dimensions, this.court, this.leftHoop, this.rightHoop)
@@ -48,8 +49,7 @@ export default class NBAJamGame {
     
     animate() {        
         // CREATES BACKGROUND
-        this.ctx.fillStyle = "orange";
-        this.ctx.fillRect(0, 0, this.dimensions.width, this.dimensions.height);
+        this.ctx.clearRect(0, 0, this.dimensions.width, this.dimensions.height);
         
         // ANIMATE OBJECTS
         this.player.animate(this.ctx)
