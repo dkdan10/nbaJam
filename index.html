@@ -5,10 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./src/style.css">
-    <title>NBA Jam</title>
+    <title>NBA Jam Multiplayer</title>
 </head>
 <body>
-    <canvas id="nba-jam-game" width="820" height="480"></canvas>
+    <main class="page-shell">
+        <section class="project-hero" aria-labelledby="project-title">
+            <div class="hero-copy">
+                <p class="eyebrow">Canvas basketball game</p>
+                <h1 id="project-title">NBA Jam Multiplayer</h1>
+                <p>
+                    The full realtime version runs on Render with Express and Socket.IO.
+                    This GitHub Pages build keeps the static local game playable while
+                    pointing visitors to the online multiplayer demo.
+                </p>
+                <div class="hero-actions" aria-label="Project links">
+                    <a class="button primary" href="https://nbajam-multiplayer.onrender.com">
+                        Play Online Multiplayer
+                    </a>
+                    <a class="button secondary" href="#local-game">
+                        Play Local Version
+                    </a>
+                    <a class="button secondary" href="https://github.com/dkdan10/nbaJam/tree/multiplayer">
+                        View Realtime Branch
+                    </a>
+                </div>
+            </div>
+            <div class="version-panel" aria-label="Project versions">
+                <div>
+                    <span class="version-label">Render</span>
+                    <strong>Online multiplayer</strong>
+                    <p>Realtime matchmaking, WebSockets, Express server, improved assets.</p>
+                </div>
+                <div>
+                    <span class="version-label">GitHub Pages</span>
+                    <strong>Static local game</strong>
+                    <p>Fast static Canvas build for local two-player play.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="local-game" class="game-section" aria-label="Static local game">
+            <div class="section-heading">
+                <h2>Static Local Version</h2>
+                <p>Use this embedded game for the GitHub Pages demo, or launch the Render version for online play.</p>
+            </div>
+            <canvas id="nba-jam-game" width="820" height="480"></canvas>
+        </section>
+    </main>
+
     <script type="module" src="./src/index.js"></script>
 </body>
 </html>

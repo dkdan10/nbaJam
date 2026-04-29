@@ -1,10 +1,25 @@
-# NBA Jam
+# NBA Jam Multiplayer
 
-A local multiplayer HTML5 Canvas basketball game inspired by NBA Jam. Two players choose characters, run the court, jump, shoot, and try to outscore each other before the clock runs out.
+An NBA Jam-inspired basketball game built with HTML5 Canvas and modern JavaScript. The project has two live versions: a static/local multiplayer build on GitHub Pages, and a full realtime online multiplayer build on Render using Express and Socket.IO.
 
-Live site: https://dkdan10.github.io/nbaJam/
+## Live Demos
 
-![wireframe](./src/assets/wireframe_draft.png)
+- **Online multiplayer demo:** https://nbajam-multiplayer.onrender.com
+- **Static GitHub Pages demo:** https://dkdan10.github.io/nbaJam/
+- **Realtime branch:** https://github.com/dkdan10/nbaJam/tree/multiplayer
+
+## Versions
+
+| Branch | Host | What it shows |
+| --- | --- | --- |
+| `master` | GitHub Pages | Static/local two-player Canvas game built with Vite |
+| `multiplayer` | Render | Full realtime version with online matchmaking, Express, Socket.IO, and improved assets |
+
+## Why Two Hosts?
+
+GitHub Pages can host static files, so it is a good fit for the local two-player version. Online multiplayer needs a persistent Node server and WebSocket support, so the full realtime version runs on Render.
+
+For portfolio review, the Render-hosted multiplayer demo is the canonical version of the project.
 
 ## Controls
 
@@ -22,11 +37,23 @@ Player 2:
 
 ## Tech Stack
 
+Static `master` branch:
+
 - HTML5 Canvas
 - Vanilla JavaScript
 - Vite
 - Vitest
 - GitHub Pages
+
+Realtime `multiplayer` branch:
+
+- HTML5 Canvas
+- Vanilla JavaScript
+- Vite
+- Express
+- Socket.IO
+- Vitest
+- Render
 
 ## Setup
 
@@ -62,7 +89,7 @@ npm run preview
 
 ## Project Structure
 
-- `src/index.js` starts the game once the canvas is available.
+- `src/index.js` starts the static game once the canvas is available.
 - `src/js/game.js` coordinates menu state, gameplay state, and the animation loop.
 - `src/js/player.js` and `src/js/player2.js` handle player movement, jumping, possession, and shooting.
 - `src/js/ball.js`, `src/js/hoop.js`, `src/js/court.js`, and `src/js/scoreboard.js` contain the core game objects.
@@ -70,4 +97,6 @@ npm run preview
 
 ## Deployment
 
-The game is deployed to GitHub Pages with GitHub Actions. Pushes to `master` run tests, build the Vite app, and publish the generated `dist` artifact.
+The `master` branch deploys to GitHub Pages with GitHub Actions. Pushes to `master` run tests, build the Vite app, and publish the generated `dist` artifact.
+
+The `multiplayer` branch deploys to Render as a Node web service because it includes the Express and Socket.IO server required for realtime online play.
