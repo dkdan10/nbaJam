@@ -1,4 +1,5 @@
 import Player from "./player";
+import key from "./utils/keymaster";
 
 
 const CONSTANTS = {
@@ -23,8 +24,8 @@ export default class OnlinePlayer extends Player {
             y: this.court.position.y - this.height
         })
 
-        if (!this.active) this.color = "black"
         this.active = active
+        if (!this.active) this.color = "black"
     }
 
 
@@ -56,7 +57,7 @@ export default class OnlinePlayer extends Player {
         }
 
         if (key.isPressed('space')) {
-            this.preformAction();
+            this.performAction();
         }
 
         this.checkBall()
@@ -67,4 +68,3 @@ export default class OnlinePlayer extends Player {
     }
 
 }
-

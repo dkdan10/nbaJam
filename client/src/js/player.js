@@ -30,7 +30,6 @@ export default class Player extends Rect {
         this.jumping = false;
         this.facingRight = true;
         // this.dennisRodmanHead = new Image();
-        // this.dennisRodmanHead.src = 'src/assets/dennisRodmanHead.png'
         this.sprite = new Image();
         this.sprite.src = spriteSrc
     }
@@ -65,7 +64,7 @@ export default class Player extends Rect {
         }
 
         if (key.isPressed('/')) {
-            this.preformAction();
+            this.performAction();
         }
 
         this.checkBall() 
@@ -75,7 +74,7 @@ export default class Player extends Rect {
         this.checkBounds()
     }
 
-    preformAction() {
+    performAction() {
         if (this.ball.possession === this) {
             // Hold to shoot. 
             this.ball.shoot()

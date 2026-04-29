@@ -1,4 +1,6 @@
 import Rect from './utils/rect'
+import assets from './assets'
+import socket from './socket'
 
 const CONSTANTS = {
     HOOP_Y_MULTIPLIER: 0.3,
@@ -34,9 +36,9 @@ export default class Hoop extends Rect {
         this.justScored = false
 
         this.hoopLeftScored = new Image();
-        this.hoopLeftScored.src = "src/assets/hoopLeftScored.png"
+        this.hoopLeftScored.src = assets.hoopLeftScored
         this.hoopRightScored = new Image();
-        this.hoopRightScored.src = "src/assets/hoopRightScored.png"
+        this.hoopRightScored.src = assets.hoopRightScored
     }
 
     animate(ctx) {

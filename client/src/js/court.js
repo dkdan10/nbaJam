@@ -1,4 +1,5 @@
 import Rect from "./utils/rect";
+import assets from "./assets";
 
 const CONSTANTS = {
     COURT_FLOOR: 0.85,
@@ -29,16 +30,16 @@ export default class Court extends Rect {
         }
         this.leftHoopImage = new Image();
         this.rightHoopImage = new Image();
-        this.leftHoopImage.src = "src/assets/cartoonHoopLeft.png"
-        this.rightHoopImage.src = "src/assets/cartoonHoopRight.png"
+        this.leftHoopImage.src = assets.hoopLeft
+        this.rightHoopImage.src = assets.hoopRight
 
 
         this.standsImage = new Image();
-        this.standsImage.src = "src/assets/basketball-stands.png"
+        this.standsImage.src = assets.basketballStands
 
         this.color = "green"
         this.courtImage = new Image();
-        this.courtImage.src = "src/assets/bballcourtsmall.png"
+        this.courtImage.src = assets.court
         this.setupBackgroundCourt(backgroundCavas)
     }  
 

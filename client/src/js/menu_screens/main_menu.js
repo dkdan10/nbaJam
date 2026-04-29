@@ -1,5 +1,6 @@
 import key from '../utils/keymaster';
 import CharacterSelect from './character_select';
+import socket from '../socket';
 
 export default class MainMenu {
     constructor (dimensions, startGame, startOnlineGame) {
@@ -84,7 +85,7 @@ export default class MainMenu {
                 key.unbind('enter')
                 this.selectingCharacters = true
                 this.characterSelect.onlineMode = true
-                socket.emit('playerAddedToQueue', socket.id)
+                socket.emit('playerAddedToQueue')
                 this.characterSelect.setupKeyHandlers()
             }
         })

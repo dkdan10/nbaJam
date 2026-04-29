@@ -4,104 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="./dist/main.js"></script>
-    <link rel="stylesheet" href="./styles.css">
     <script src="https://kit.fontawesome.com/caa36ac162.js"></script>
-    <title>NBA Jam</title>
+    <title>NBA Jam Multiplayer</title>
 </head>
 <body>
     <div style="font-family: Scoreboard; display: none;">.</div>
 
-    <!-- SIDE BAR -->
     <nav class="main-menu">
-    
         <ul class="icons">
             <li>
                 <a href="https://github.com/dkdan10/nbaJam" target="_blank" label="GitHub">
                     <i class="fab fa-github"></i>
-                    <span class="label">
-                        GitHub
-                    </span>
+                    <span class="label">GitHub</span>
                 </a>
             </li>
-    
             <li>
                 <a href="https://www.linkedin.com/in/daniel-keinan-ab9a5a148/" target="_blank" label="LinkedIn">
                     <i class="fab fa-linkedin"></i>
-                    <span class="label">
-                        LinkedIn
-                    </span>
+                    <span class="label">LinkedIn</span>
                 </a>
             </li>
-            <li>
-                <a href="https://angel.co/daniel-keinan" target="_blank" label="AngelList">
-                    <i class="fab fa-angellist"></i>
-                    <span class="label">
-                        AngelList
-                    </span>
-                </a>
-            </li>
-    
             <li>
                 <a href="https://dkdan10.github.io" target="_blank" label="Personal Portfolio">
                     <i class="fas fa-briefcase"></i>
-                    <span class="label">
-                        Daniel Keinan Portfolio
-                    </span>
+                    <span class="label">Daniel Keinan Portfolio</span>
                 </a>
             </li>
-    
             <li>
-                <a href="mailto:danielkeinan@icloud.com" label="Personal Portfolio">
+                <a href="mailto:danielkeinan@icloud.com" label="Email">
                     <i class="icon fas fa-envelope"></i>
-                    <span class="label">
-                        danielkeinan@icloud.com
-                    </span>
+                    <span class="label">danielkeinan@icloud.com</span>
                 </a>
             </li>
-    
         </ul>
     </nav>
 
-    <!-- GAME VIEWS -->
-    <div class="canvas-wrapper">
-        <canvas id="nba-jam-background" width="820" height="480"></canvas>
-        <canvas id="nba-jam-game" width="820" height="480"></canvas>
-    </div>
-    <!-- INSTRUCTIONS VIEWS -->
-    <div class="instructions-container">
-        <h3>Navigate Game Menus with arrow keys. Select option with enter.</h3>
-        <h1>Instructions</h1>
-        <div class="instructions">
-            <div class="online-instructions">
-                <h3>Online:</h3>
-                <p>Right Arrow: Move Right</p>
-                <p>Left Arrow: Move left</p>
-                <p>Up Arrow: Jump</p>
-                <p>Space Bar: Shoot ball. Hold to shoot</p>
-            </div>
-            <div class="offline-instructions">
-                <h3>Offline:</h3>
-                <p>Right Arrow: Move Player 2 Right</p>
-                <p>Left Arrow: Move Player 2 left</p>
-                <p>Up Arrow: Player 2 Jump</p>
-                <p>/: Player 2 shoot ball. Hold to shoot</p>
-                <p>d: Move Player 1 Right</p>
-                <p>a: Move Player 1 left</p>
-                <p>w: Arrow: Player 1 Jump</p>
-                <p>q: Player 1 shoot ball. Hold to shoot</p>
+    <main>
+        <div class="canvas-wrapper">
+            <canvas id="nba-jam-background" width="820" height="480"></canvas>
+            <canvas id="nba-jam-game" width="820" height="480"></canvas>
+        </div>
+
+        <div class="instructions-container">
+            <h3>Navigate menus with arrow keys. Select with Enter.</h3>
+            <h1>Instructions</h1>
+            <div class="instructions">
+                <div class="online-instructions">
+                    <h3>Online:</h3>
+                    <p>Right Arrow: Move Right</p>
+                    <p>Left Arrow: Move Left</p>
+                    <p>Up Arrow: Jump</p>
+                    <p>Space Bar: Shoot. Hold to shoot.</p>
+                </div>
+                <div class="offline-instructions">
+                    <h3>Offline:</h3>
+                    <p>Right Arrow: Move Player 2 Right</p>
+                    <p>Left Arrow: Move Player 2 Left</p>
+                    <p>Up Arrow: Player 2 Jump</p>
+                    <p>/: Player 2 shoot. Hold to shoot.</p>
+                    <p>d: Move Player 1 Right</p>
+                    <p>a: Move Player 1 Left</p>
+                    <p>w: Player 1 Jump</p>
+                    <p>q: Player 1 shoot. Hold to shoot.</p>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- SOCKET INIT -->
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script> 
-        const socket = io();
-        socket.on('transmitSocketInfo', (data) => {
-            // socket.number = data["number"]
-            console.log(socket)
-        })
-    </script>
+    <script type="module" src="/src/index.js"></script>
 </body>
 </html>

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: nbajam-multiplayer
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production

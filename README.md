@@ -1,53 +1,106 @@
-# nbaJam
+# NBA Jam Multiplayer
 
-## Background and Overview
+NBA Jam Multiplayer is a browser basketball game built with HTML5 Canvas, Express, and Socket.IO. Two players can open the game, choose Online mode, get paired by the server, select characters, and play a realtime one-on-one match.
 
-Basketball has been a big part of my life and I want to share the joy of playing the game with my users. NBA Jam is a game that extends generational boundaries, and with that in mind, my goal is to bring my users an experience that they would share with thier kids for generations as well. 
+Live Render URL: _add Render service URL after deployment_
 
-NBA Jam is a relatively simple game; One or two players go head to head on the basketball court in a 2 minute game. The player mechanics are to run, jump, steal, and, of course, shoot the basketball into the hoop. This game was inspired by the original NBA Jam.
+## Tech Stack
 
-![wireframe](./client/src/assets/wireframe_draft.png)
+- HTML5 Canvas
+- Vanilla JavaScript modules
+- Vite
+- Express
+- Socket.IO
+- Vitest
 
-## Functionality
-Controls:
-* Users use the arrow keys or WSAD in order to controller thier players.
-* Using x or /, a User can get thier player to shoot or steal the ball depending on whether they are on offense or defense. 
+## Local Setup
 
-Technologies:
-* HTML5 Canvas
-* Vanilla JavaScript
-* Webpack
-* Howler.js
+Install dependencies:
 
-Main Files:
-* player.js (AIPlayer, HumanPlayer)
-* court.js (Renders the court and the hoops)
-* ball.js (Holds the balls location)
-* hoop.js (Left hoop and right hoop, logic for when a point is scored)
-* scoreboard.js (Middle of the screen, has both scores and countdown.)
+```bash
+npm ci
+```
 
-## MVP Features
-* Court to Render and a player to move along the court.
-* Implement ball logic, where a player can run with a ball and shoot a ball at the hoop.
-* Add score keeping to the game.
-* Allow for two players to play the game.
-* Get AI player to respond to Human player's input and give a little competition. 
+Build the browser client:
 
-## Development timeline
-Day 1
-* Do first MVP
+```bash
+npm run build
+```
 
-Day 2
-* Do second MVP
+Start the Express and Socket.IO server:
 
-Day 3
-* Clean up first two MVPs work on third MVP.
+```bash
+npm start
+```
 
-Day 4
-* Do fourth MVP
+Open:
 
-Day 5
-* Do fifth MVP
+```text
+http://localhost:8080
+```
 
-Bonus
-* Add websockets to allow for two players to play against eachother from diffrent computers. 
+Health check:
+
+```text
+http://localhost:8080/healthz
+```
+
+## Development
+
+Run the Vite dev server:
+
+```bash
+npm run dev
+```
+
+For full realtime multiplayer testing, run the production-style flow with `npm run build` and `npm start`, then open two browser windows at `http://localhost:8080`.
+
+## Controls
+
+Online:
+
+- Arrow Left / Arrow Right: move
+- Arrow Up: jump
+- Space: shoot, hold to shoot
+
+Offline:
+
+- Player 1: `a`, `d`, `w`, `q`
+- Player 2: Arrow Left, Arrow Right, Arrow Up, `/`
+
+Menus:
+
+- Arrow Up / Arrow Down: navigate
+- Enter: select or ready up
+
+## Render Deployment
+
+This branch deploys as a Render Web Service because realtime multiplayer requires a running Node server.
+
+Recommended Render settings:
+
+- Branch: `multiplayer`
+- Build command: `npm ci && npm run build`
+- Start command: `npm start`
+- Health check path: `/healthz`
+
+The included `render.yaml` captures the same settings for blueprint-based deployment.
+
+## Manual Multiplayer Verification
+
+1. Open the deployed URL in two browser windows or two devices.
+2. Select Online in both clients.
+3. Confirm both clients reach character select.
+4. Change characters and confirm selection syncs.
+5. Press Enter in both clients to ready up.
+6. Confirm gameplay starts in both clients.
+7. Move both players and confirm positions sync.
+8. Shoot and score to confirm ball and score updates sync.
+9. Close one browser and confirm the other client exits the match cleanly.
+
+## Known Limitations
+
+- Multiplayer state is stored in memory.
+- The app is intended for a single Render instance.
+- Multiple server instances would require sticky sessions and shared state.
+- There are no accounts, matchmaking rooms, or persistent stats.

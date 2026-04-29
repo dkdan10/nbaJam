@@ -1,4 +1,5 @@
 import Circle from "./utils/circle";
+import socket from "./socket";
 
 const CONSTANTS = {
     RADIUS: 15,
@@ -50,7 +51,7 @@ export default class Ball extends Circle {
     claimPossession(player) {
         if (!this.noTouch[player.color]) {
             this.possession = player
-            socket.emit("changeOfPossesion", {
+            socket.emit("changeOfPossession", {
                 gameId: this.gameId,
                 fromSocket: socket.id
             })
@@ -210,12 +211,14 @@ export default class Ball extends Circle {
 
     removePossession() {
         this.possession = null
-        socket.emit("removeBallPossession", {
-            gameId: this.gameId,
-            fromSocket: socket.id,
-            velocity: this.velocity,
-            position: this.position
-        })
+        if (this.gameId) {
+            socket.emit("removeBallPossession", {
+                gameId: this.gameId,
+                fromSocket: socket.id,
+                velocity: this.velocity,
+                position: this.position
+            })
+        }
     }
 
     move() {
@@ -247,13 +250,15 @@ export default class Ball extends Circle {
             }
             this.position.y -= this.velocity.y
         }
-        // socket.emit("updateBallWithPos", {
-        //     gameId: this.gameId,
-        //     fromSocket: socket.id,
-        //     velocity: this.velocity,
-        //     position: this.position,
-        //     otherPlayerFacing: this.possession.facingRight
-        // })
+        if (this.gameId) {
+            socket.emit("updateBallPos", {
+                gameId: this.gameId,
+                fromSocket: socket.id,
+                velocity: this.velocity,
+                position: this.position,
+                otherPlayerFacing: this.possession.facingRight
+            })
+        }
     }
 
 

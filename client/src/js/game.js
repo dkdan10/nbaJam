@@ -6,6 +6,7 @@ import Scoreboard from './scoreboard';
 import Player2 from './player2';
 import MainMenu from './menu_screens/main_menu';
 import OnlinePlayer from './online_player';
+import socket from './socket';
 
 export default class NBAJamGame {
     constructor(canvas, backgroundCanvas) {        
@@ -14,6 +15,7 @@ export default class NBAJamGame {
         this.dimensions = { width: canvas.width, height: canvas.height };
         this.mainMenu = new MainMenu(this.dimensions, this.startGame.bind(this), this.startOnlineGame.bind(this))
         this.playingGame = false;
+        this.onlineHandlers = null;
         this.renderMenu()
     }
 
@@ -82,6 +84,7 @@ export default class NBAJamGame {
     }
 
     runOnlineGame(leftSprite, rightSprite, mySide) {
+        this.clearOnlineHandlers()
         this.court = new Court(this.dimensions, this.backgroundCanvas);
         this.leftHoop = new Hoop(this.dimensions, "LEFT", this.onlineGameId);
         this.rightHoop = new Hoop(this.dimensions, "RIGHT", this.onlineGameId);
@@ -97,44 +100,80 @@ export default class NBAJamGame {
             this.myPlayer = new OnlinePlayer(this.court, this.ball, rightSprite, "RIGHT", true)
         }
 
-        socket.on("updateOtherPos", (data) => {
+        const updateOtherPos = (data) => {
             this.otherPlayer.position = {
                 x: data["x"],
                 y: data["y"],
             }
             this.otherPlayer.facingRight  = data["otherPlayerFacing"]
             this.otherPlayer.jumping = data["otherPlayerJumping"]
-        }) 
-        socket.on("updateBallPossesion", data => {
+        }
+        const updateBallPossession = data => {
             this.ball.possession = this.otherPlayer
-            socket.emit("registeredPossesionChange", {
+            socket.emit("registeredPossessionChange", {
                 gameId: this.onlineGameId
             })
-        })
-        socket.on("updateNoBallPossesion", data => {
+        }
+        const updateNoBallPossession = data => {
             this.ball.possession = null
             this.ball.position = data["position"]
             this.ball.velocity = data["velocity"]
-        })
-        // socket.on("updateBallPos", data => {
-        //     this.ball.position = data["position"]
-        //     this.ball.velocity = data["velocity"]
-        //     this.otherPlayer.facingRight = data["otherPlayerFacing"]
-        // })
-        socket.on("endGameFromDisconnect", () => {
+        }
+        const updateBallPos = data => {
+            if (this.ball.possession === this.myPlayer) return
+            this.ball.position = data["position"] || {
+                x: data["x"],
+                y: data["y"]
+            }
+            if (data["velocity"]) this.ball.velocity = data["velocity"]
+            if (typeof data["otherPlayerFacing"] === "boolean") {
+                this.otherPlayer.facingRight = data["otherPlayerFacing"]
+            }
+        }
+        const endGameFromDisconnect = () => {
             this.playingGame = false
             this.onlineGameId = null
+            this.clearOnlineHandlers()
             setTimeout(() => {
                 this.showMenu()
             }, 1000);
-        })
+        }
 
-        socket.on("updateNewScore", (data) => {
+        const updateNewScore = (data) => {
             this.leftHoop.score = data["leftScore"]
             this.rightHoop.score = data["rightScore"]
-        })
+        }
+
+        this.onlineHandlers = {
+            updateOtherPos,
+            updateBallPossession,
+            updateNoBallPossession,
+            updateBallPos,
+            endGameFromDisconnect,
+            updateNewScore
+        }
+
+        socket.on("updateOtherPos", updateOtherPos)
+        socket.on("updateBallPossession", updateBallPossession)
+        socket.on("updateNoBallPossession", updateNoBallPossession)
+        socket.on("updateBallPos", updateBallPos)
+        socket.on("endGameFromDisconnect", endGameFromDisconnect)
+        socket.on("updateNewScore", updateNewScore)
 
         this.runOnline();
+    }
+
+    clearOnlineHandlers() {
+        if (!this.onlineHandlers) return
+
+        socket.off("updateOtherPos", this.onlineHandlers.updateOtherPos)
+        socket.off("updateBallPossession", this.onlineHandlers.updateBallPossession)
+        socket.off("updateNoBallPossession", this.onlineHandlers.updateNoBallPossession)
+        socket.off("updateBallPos", this.onlineHandlers.updateBallPos)
+        socket.off("endGameFromDisconnect", this.onlineHandlers.endGameFromDisconnect)
+        socket.off("updateNewScore", this.onlineHandlers.updateNewScore)
+
+        this.onlineHandlers = null
     }
 
     runOnline () {
@@ -172,8 +211,8 @@ export default class NBAJamGame {
         socket.emit("updateBallPos", {
             gameId: this.onlineGameId,
             fromSocket: socket.id,
-            x: this.ball.position.x,
-            y: this.ball.position.y
+            position: this.ball.position,
+            velocity: this.ball.velocity
         })
         // REQUEST NEXT FRAME
         if (this.playingGame) {
@@ -209,6 +248,7 @@ export default class NBAJamGame {
         
         this.playingGame = false
         this.onlineGameId = null
+        this.clearOnlineHandlers()
         setTimeout(() => {
             this.showMenu()
         }, 2000);

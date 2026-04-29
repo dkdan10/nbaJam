@@ -1,177 +1,242 @@
-const express = require('express')
-const app = express()
-const server = require("http").Server(app)
+const express = require("express");
+const path = require("path");
+const http = require("http");
+const { Server } = require("socket.io");
 
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/client/index.html')
+const DEFAULT_PORT = 8080;
+
+const createInitialState = () => ({
+    sockets: {},
+    playerQueue: [],
+    games: {}
 });
-app.use('/', express.static(__dirname + "/client"))
-app.use('/client', express.static(__dirname + "/client"))
 
-const port = process.env.PORT || 8080
-server.listen(port)
-console.log("server started")
+const createGameId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-const SOCKET_LIST = {}
-const PLAYER_QUEUE = []
-const GAMES = {}
+const createGameServer = ({ app = express(), state = createInitialState(), io } = {}) => {
+    const distPath = path.join(__dirname, "dist");
+    const clientPath = path.join(__dirname, "client");
 
-const io = require("socket.io")(server, {})
-io.sockets.on("connection", function(socket) {
-    socket.number = "" + (100 * Math.random())
+    app.get("/healthz", (req, res) => {
+        res.status(200).send("ok");
+    });
 
-    SOCKET_LIST[socket.id] = socket
-    // socket.emit('transmitSocketInfo', {
-    //     id: 10000 * Math.Ra
-    // })
-    socket.on('disconnect', function() {
-        const socketToRemove = SOCKET_LIST[socket.id]
-        delete SOCKET_LIST[socket.id]
-        if (socketToRemove.currentGameId) {
-            const game = GAMES[socketToRemove.currentGameId]
-            if (game && game.leftPlayerId !== socketToRemove.id) {
-                if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("endGameFromDisconnect")
-            } else if (game){
-                if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("endGameFromDisconnect")
+    app.use(express.static(distPath));
+    app.use("/client", express.static(clientPath));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(distPath, "index.html"));
+    });
+
+    if (io) attachSocketHandlers(io, state);
+
+    return { app, state };
+};
+
+const attachSocketHandlers = (io, state = createInitialState()) => {
+    const sockets = state.sockets;
+    const playerQueue = state.playerQueue;
+    const games = state.games;
+
+    const emitToSocket = (socketId, event, payload) => {
+        const recipient = sockets[socketId];
+        if (recipient) recipient.emit(event, payload);
+    };
+
+    const emitToOpponent = (game, fromSocket, event, payload) => {
+        if (!game) return;
+        const recipientId = game.leftPlayerId === fromSocket ? game.rightPlayerId : game.leftPlayerId;
+        emitToSocket(recipientId, event, payload);
+    };
+
+    const removeFromQueue = (socketId) => {
+        let index = playerQueue.indexOf(socketId);
+        while (index > -1) {
+            playerQueue.splice(index, 1);
+            index = playerQueue.indexOf(socketId);
+        }
+    };
+
+    const deleteGame = (gameId) => {
+        if (!gameId || !games[gameId]) return;
+        const game = games[gameId];
+        if (sockets[game.leftPlayerId]) sockets[game.leftPlayerId].currentGameId = null;
+        if (sockets[game.rightPlayerId]) sockets[game.rightPlayerId].currentGameId = null;
+        delete games[gameId];
+    };
+
+    const findGame = (gameId) => games[gameId] || null;
+
+    const checkQueue = () => {
+        while (playerQueue.length > 1) {
+            const leftPlayerId = playerQueue.shift();
+            const rightPlayerId = playerQueue.shift();
+
+            if (leftPlayerId === rightPlayerId || !sockets[leftPlayerId] || !sockets[rightPlayerId]) {
+                continue;
             }
-            delete GAMES[socketToRemove.currentGameId]
-        }
-        const playerQindex = PLAYER_QUEUE.indexOf(socket.id);
-        if (playerQindex > -1) {
-            PLAYER_QUEUE.splice(playerQindex, 1);
-        }
 
-    })
-
-    socket.on('playerAddedToQueue', function() {
-        PLAYER_QUEUE.push(socket.id)
-        checkQueue()
-    })
-
-    socket.on('charChanged', function(data) {
-        const game = GAMES[data.gameId]
-        if (game && SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updatedSelectedChars", data)
-        if (game && SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updatedSelectedChars", data)
-    })
-
-    socket.on('leftReady', function(data) {
-        const game = GAMES[data.gameId]
-        game.leftReady = true
-        if (game && game.rightReady) {
-            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("startGame", data)
-            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("startGame", data)
-        } else if (game) {
-            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updatedLeftReady", data)
-            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updatedLeftReady", data)
-        }
-    })
-
-    socket.on('rightReady', function (data) {
-        const game = GAMES[data.gameId]
-        game.rightReady = true
-        if (game && game.leftReady) {
-            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("startGame", data)
-            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("startGame", data)
-        } else if (game) {
-            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updatedRightReady", data)
-            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updatedRightReady", data)
-        }
-    })
-
-    socket.on('updateMyPos', function (data) {
-        const game = GAMES[data.gameId]
-        if (game && (game.leftPlayerId !== data.fromSocket)) {
-            if (SOCKET_LIST[game.leftPlayerId]) SOCKET_LIST[game.leftPlayerId].emit("updateOtherPos", data)
-        } else if (game) {
-            if (SOCKET_LIST[game.rightPlayerId]) SOCKET_LIST[game.rightPlayerId].emit("updateOtherPos", data)
-        }
-    })
-
-
-    socket.on('changeOfPossesion', function (data) {
-        const game = GAMES[data.gameId]
-        if (game && !game.justChangedPossesion && game.leftPlayerId !== data.fromSocket) {
-            SOCKET_LIST[game.leftPlayerId].emit("updateBallPossesion", data)
-        } else if (game && !game.justChangedPossesion) {
-            SOCKET_LIST[game.rightPlayerId].emit("updateBallPossesion", data)
-        }
-        if (game) game.justChangedPossesion = true
-    })
-    socket.on('registeredPossesionChange', function (data) {
-        const game = GAMES[data.gameId]
-        if (game) game.justChangedPossesion = false
-    })
-
-    socket.on('removeBallPossession', function (data) {
-        const game = GAMES[data.gameId]
-        if (game && game.leftPlayerId !== data.fromSocket) {
-            SOCKET_LIST[game.leftPlayerId].emit("updateNoBallPossesion", data)
-        } else if (game) {
-            SOCKET_LIST[game.rightPlayerId].emit("updateNoBallPossesion", data)
-        }
-    })
-
-    socket.on('updateBallWithPos', function (data) {
-        const game = GAMES[data.gameId]
-        if (game && game.leftPlayerId !== data.fromSocket) {
-            SOCKET_LIST[game.leftPlayerId].emit("updateBallPos", data)
-        } else if (game) {
-            SOCKET_LIST[game.rightPlayerId].emit("updateBallPos", data)
-        }
-    })
-
-    socket.on("updateScore", function (data) {
-        const game = GAMES[data.gameId]
-        if (game && !game.justScored) {
-            switch (data.addToHoop) {
-                case "LEFT": 
-                    game.leftScore += 2
-                    break;
-                case "RIGHT":
-                    game.rightScore += 2
-                    break;
-                default:
-                    return
-            }
-            const sendData = {
-                leftScore: game.leftScore,
-                rightScore: game.rightScore
-            }
-            if (!game.justScored) SOCKET_LIST[game.leftPlayerId].emit("updateNewScore", sendData)
-            if (!game.justScored) SOCKET_LIST[game.rightPlayerId].emit("updateNewScore", sendData)
-            game.justScored = true
-            setTimeout(() => {
-                game.justScored = false
-            }, 1000);
-        }
-    })
-
-    console.log("socket connection")
-})
-
-
-const checkQueue = () => {
-    if (PLAYER_QUEUE.length > 1) {
-        const gameObj = {
-            id: new Date().getTime(),
-            leftPlayerId: PLAYER_QUEUE[0],
-            rightPlayerId: PLAYER_QUEUE[1],
-            leftScore: 0,
-            rightScore: 0,
-            justScored: false
-        }
-        GAMES[gameObj.id] = gameObj
-        for (let i = 0; i < 2; i++) {
-            SOCKET_LIST[PLAYER_QUEUE[i]].emit('matchFound', {
-                leftPlayerId: PLAYER_QUEUE[0],
-                rightPlayerId: PLAYER_QUEUE[1],
+            const game = {
+                id: createGameId(),
+                leftPlayerId,
+                rightPlayerId,
+                leftScore: 0,
+                rightScore: 0,
                 leftReady: false,
                 rightReady: false,
-                gameId: gameObj.id
-            })
-            SOCKET_LIST[PLAYER_QUEUE[0]].currentGameId = gameObj.id
-            SOCKET_LIST[PLAYER_QUEUE[1]].currentGameId = gameObj.id
+                justChangedPossession: false,
+                justScored: false
+            };
+
+            games[game.id] = game;
+            sockets[leftPlayerId].currentGameId = game.id;
+            sockets[rightPlayerId].currentGameId = game.id;
+
+            const payload = {
+                leftPlayerId,
+                rightPlayerId,
+                leftReady: false,
+                rightReady: false,
+                gameId: game.id
+            };
+
+            emitToSocket(leftPlayerId, "matchFound", payload);
+            emitToSocket(rightPlayerId, "matchFound", payload);
         }
-        PLAYER_QUEUE.splice(0,2)
-    }
+    };
+
+    const handleReady = (side, data) => {
+        const game = findGame(data && data.gameId);
+        if (!game) return;
+
+        if (side === "left") game.leftReady = true;
+        if (side === "right") game.rightReady = true;
+
+        if (game.leftReady && game.rightReady) {
+            emitToSocket(game.leftPlayerId, "startGame", data);
+            emitToSocket(game.rightPlayerId, "startGame", data);
+            return;
+        }
+
+        const event = side === "left" ? "updatedLeftReady" : "updatedRightReady";
+        emitToSocket(game.leftPlayerId, event, data);
+        emitToSocket(game.rightPlayerId, event, data);
+    };
+
+    io.sockets.on("connection", (socket) => {
+        sockets[socket.id] = socket;
+
+        socket.on("disconnect", () => {
+            const socketToRemove = sockets[socket.id];
+            delete sockets[socket.id];
+            removeFromQueue(socket.id);
+
+            if (!socketToRemove || !socketToRemove.currentGameId) return;
+
+            const game = findGame(socketToRemove.currentGameId);
+            if (!game) return;
+
+            emitToOpponent(game, socket.id, "endGameFromDisconnect");
+            deleteGame(game.id);
+        });
+
+        socket.on("playerAddedToQueue", () => {
+            if (socket.currentGameId || playerQueue.includes(socket.id)) return;
+            playerQueue.push(socket.id);
+            checkQueue();
+        });
+
+        socket.on("charChanged", (data) => {
+            const game = findGame(data && data.gameId);
+            if (!game) return;
+            emitToSocket(game.leftPlayerId, "updatedSelectedChars", data);
+            emitToSocket(game.rightPlayerId, "updatedSelectedChars", data);
+        });
+
+        socket.on("leftReady", (data) => handleReady("left", data));
+        socket.on("rightReady", (data) => handleReady("right", data));
+
+        socket.on("updateMyPos", (data) => {
+            const game = findGame(data && data.gameId);
+            if (!game) return;
+            emitToOpponent(game, data.fromSocket, "updateOtherPos", data);
+        });
+
+        socket.on("changeOfPossession", (data) => {
+            const game = findGame(data && data.gameId);
+            if (!game || game.justChangedPossession) return;
+            emitToOpponent(game, data.fromSocket, "updateBallPossession", data);
+            game.justChangedPossession = true;
+        });
+
+        socket.on("registeredPossessionChange", (data) => {
+            const game = findGame(data && data.gameId);
+            if (game) game.justChangedPossession = false;
+        });
+
+        socket.on("removeBallPossession", (data) => {
+            const game = findGame(data && data.gameId);
+            if (!game) return;
+            emitToOpponent(game, data.fromSocket, "updateNoBallPossession", data);
+        });
+
+        socket.on("updateBallPos", (data) => {
+            const game = findGame(data && data.gameId);
+            if (!game) return;
+            emitToOpponent(game, data.fromSocket, "updateBallPos", data);
+        });
+
+        socket.on("updateScore", (data) => {
+            const game = findGame(data && data.gameId);
+            if (!game || game.justScored) return;
+
+            if (data.addToHoop === "LEFT") game.leftScore += 2;
+            else if (data.addToHoop === "RIGHT") game.rightScore += 2;
+            else return;
+
+            const payload = {
+                leftScore: game.leftScore,
+                rightScore: game.rightScore
+            };
+
+            emitToSocket(game.leftPlayerId, "updateNewScore", payload);
+            emitToSocket(game.rightPlayerId, "updateNewScore", payload);
+
+            game.justScored = true;
+            setTimeout(() => {
+                if (games[game.id]) games[game.id].justScored = false;
+            }, 1000);
+        });
+    });
+
+    return {
+        state,
+        checkQueue,
+        removeFromQueue
+    };
+};
+
+const startServer = () => {
+    const app = express();
+    const server = http.Server(app);
+    const io = new Server(server);
+    const { state } = createGameServer({ app, io });
+    const port = process.env.PORT || DEFAULT_PORT;
+
+    server.listen(port, () => {
+        console.log(`server started on ${port}`);
+    });
+
+    return { app, server, io, state };
+};
+
+if (require.main === module) {
+    startServer();
 }
+
+module.exports = {
+    attachSocketHandlers,
+    createGameServer,
+    createInitialState,
+    startServer
+};

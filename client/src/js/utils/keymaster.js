@@ -293,4 +293,6 @@
 
     if (typeof module !== 'undefined') module.exports = assignKey;
 
-})(this);
+})(typeof window !== 'undefined' ? window : globalThis);
+
+export default (typeof window !== 'undefined' ? window.key : globalThis.key);

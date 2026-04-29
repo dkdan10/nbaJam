@@ -1,4 +1,6 @@
 import key from '../utils/keymaster';
+import assets from '../assets';
+import socket from '../socket';
 
 export default class CharacterSelect {
     constructor(dimensions, selectedCharacters) {
@@ -7,10 +9,10 @@ export default class CharacterSelect {
         this.leftSelected = 0
         this.rightSelected = 1
         this.characters = [
-            { name: "Rodman", src: "src/assets/rodmanSmall.png"},
-            { name: "Drake", src: "src/assets/drakeSmall.png" },
-            { name: "Lebron", src: "src/assets/lebronSmall.png" },
-            { name: "Peach", src: "src/assets/peachSmall.png"}
+            { name: "Rodman", src: assets.rodman},
+            { name: "Drake", src: assets.drake },
+            { name: "Lebron", src: assets.lebron },
+            { name: "Peach", src: assets.peach}
         ]
         
         this.leftChar = new Image();
@@ -84,10 +86,10 @@ export default class CharacterSelect {
         if (this.onlineMode) ctx.fillText("Online Mode", this.dimensions.width / 2, loc.y - 80)
         ctx.font = "bold 12pt 'Scoreboard'";
         if (this.leftReady) ctx.fillText("Ready", loc.x, loc.y - 70)
-        if (this.leftPlayerId && this.rightPlayerId) {
-            ctx.fillText(`${this.leftPlayerId}`, loc.x, loc.y - 50)
-        } else if (this.onlineMode) {
-            ctx.fillText(`${socket.id}`, loc.x, loc.y - 50)
+            if (this.leftPlayerId && this.rightPlayerId) {
+                ctx.fillText(this.isPlayingLeft ? "You" : "Opponent", loc.x, loc.y - 50)
+            } else if (this.onlineMode) {
+                ctx.fillText("You", loc.x, loc.y - 50)
         }
 
         ctx.font = "bold 40pt 'Scoreboard'";
@@ -110,7 +112,7 @@ export default class CharacterSelect {
         ctx.font = "bold 12pt 'Scoreboard'";
         if (this.rightReady) ctx.fillText("Ready", loc.x, loc.y - 70)
         if (this.leftPlayerId && this.rightPlayerId) {
-            ctx.fillText(`${this.rightPlayerId}`, loc.x, loc.y - 50)
+            ctx.fillText(this.isPlayingRight ? "You" : "Opponent", loc.x, loc.y - 50)
         } else if (this.onlineMode) {
             ctx.fillText(`Waiting for Player`, loc.x, loc.y - 50)
         }
